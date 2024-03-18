@@ -30,3 +30,7 @@ html, body {
   font-family: "Great Vibes", cursive;
   font-size: 2rem;
 }
+
+.btn-primary {
+  background-color: red;
+}
