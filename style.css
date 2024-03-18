@@ -1,0 +1,32 @@
+.great-vibes-regular {
+  font-family: "Great Vibes", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.bg-dark {
+    background-color: #111f3f !important;
+}
+
+.navbar-nav {
+  flex-direction: column;
+}
+
+.navbar-nav .nav-item {
+  width: 100%;
+}
+
+.navbar-nav .nav-link {
+  padding: .5rem 1rem;
+}
+
+.navbar-brand {
+  font-family: "Great Vibes", cursive;
+  font-size: 2rem;
+}
