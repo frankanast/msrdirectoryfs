@@ -24,7 +24,14 @@ async def get_autocomplete_data():
     cursor = connection.cursor()
 
     cursor.execute("SELECT * FROM categories")
-    data = cursor.fetchall()
+    rows = cursor.fetchall()
 
-    return json.dumps(data)
+    results = []
+    for row in rows:
+        results.append(dict(row))
+    data = json.dumps(results)
+
+    cursor.close()
+    connection.close()
+    return data
 
