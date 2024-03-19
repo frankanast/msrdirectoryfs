@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+import psycopg2
 
 app = FastAPI()
 
@@ -10,3 +11,22 @@ async def root():
 @app.get("/hello/{name}")
 async def hworld(name: str):
     return {"message": f"hello, {name}"}
+
+@app.get("/autocomplete_data")
+async def get_autocomplete_data():
+    connection = psycopg2.connect(
+        database="dfg7578eodbk83",
+        host="cdgn4ufq38ipd0.cluster-czz5s0kz4scl.eu-west-1.rds.amazonaws.com",
+        user="ub72dcmj38e4l2",
+        password="p3d3b7bc9f84595d79b5e170cef0107c5cc78eda29be0dfc4c4127fb1c80077b7",
+        port="5432"
+    )
+
+    cursor = connection.cursor()
+
+    data = cursor.execute(
+        "SELECT * FROM test WHERE test_id = 1"
+    )
+
+    return data
+
