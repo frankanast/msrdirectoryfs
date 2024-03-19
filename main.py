@@ -20,7 +20,8 @@ async def get_autocomplete_data():
     connection = psycopg2.connection(DATABASE_URL)
     cursor = connection.cursor()
 
-    cursor.execute("""SELECT * FROM test WHERE test_id = 1""")
+    cursor.execute("""SELECT * FROM test WHERE test_id = 1;""")
     data = cursor.fetchall()
 
+    print(data)
     return data
