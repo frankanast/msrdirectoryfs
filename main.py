@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 import psycopg2
+from json import JSONDecoder, JSONEncoder
 import os
 
 app = FastAPI()
@@ -19,9 +20,10 @@ async def hworld(name: str):
 async def get_autocomplete_data():
     connection = psycopg2.connect(DATABASE_URL)
     cursor = connection.cursor()
+    encoder = JSONEncoder()
 
     cursor.execute("""SELECT * FROM test WHERE test_id = 1;""")
     data = cursor.fetchall()
 
-    print(data)
-    return data
+    return encoder.encode(data)
+
