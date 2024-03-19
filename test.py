@@ -1,19 +1,12 @@
-import json
+from fastapi import FastAPI
 
-def get_data(path_: str):
-    with open(path_) as source:
-        data = json.load(source)
-        return data
-
-def get_supplier_names(path_: str):
-    data = get_data(path_)
-
-    suppliers = {}  # --> {"value": id}
-    for record in data:
-        suppliers[record["name"]] = record["id"]
-
-    return suppliers
+app = FastAPI()
 
 
-if __name__ == "__main__":
-    get_supplier_names("suppliers.json")
+@app.get("/")
+async def root():
+    return {"message": "Hello World"}
+
+@app.get("/hello/{name}")
+async def hworld(name: str):
+    return {"message": f"hello, {name}"}
