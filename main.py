@@ -24,7 +24,7 @@ async def get_autocomplete_data():
     cursor = connection.cursor()
 
     cursor.execute("SELECT name FROM categories")
-    data = json.dumps(cursor.fetchall())
+    data = [row[0] for row in cursor.fetchall()]
 
     cursor.close()
     connection.close()
