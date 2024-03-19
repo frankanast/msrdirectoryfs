@@ -17,7 +17,7 @@ async def hworld(name: str):
 
 @app.get("/autocomplete_data")
 async def get_autocomplete_data():
-    connection = psycopg2.connection(DATABASE_URL)
+    connection = psycopg2.connect(DATABASE_URL)
     cursor = connection.cursor()
 
     cursor.execute("""SELECT * FROM test WHERE test_id = 1;""")
