@@ -24,7 +24,7 @@ async def get_autocomplete_data():
 
     cursor = connection.cursor()
 
-    data = cursor.execute(
+    data = cursor.fetchall(
         "SELECT * FROM test WHERE test_id = 1"
     )
 
