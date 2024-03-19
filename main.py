@@ -1,9 +1,8 @@
 from fastapi import FastAPI
 import os
 
-DATABASE_URL = os.environ['DATABASE_URL']
 app = FastAPI()
-
+DATABASE_URL = os.environ['DATABASE_URL']
 
 @app.get("/")
 async def root():
