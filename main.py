@@ -1,17 +1,21 @@
 from json import JSONDecoder
+import psycopg2
 from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse
-from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
 
 app = FastAPI()
-app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="templates")
+# connection = psycopg2.connect(
+#     database="db_name",
+#     host="db_host",
+#     user="db_user",
+#     password="db_pass",
+#     port="db_port"
+# )
+# cursor = connection.cursor()
 
 
-@app.get("/", response_class=HTMLResponse)
+@app.get("/")
 async def read_root(request: Request):
-    return templates.TemplateResponse("templates/index.html", {"request": request})
+    return {"hello": "world"}
 
 
 @app.get("/hello/{name}")
