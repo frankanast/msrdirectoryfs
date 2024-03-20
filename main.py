@@ -62,7 +62,7 @@ async def import_csv(filepath: str = 'backup.csv'):
 
     try:
         with open(filepath, 'r', newline='') as csvfile:
-            csv_reader = csv.reader(csvfile)
+            csv_reader = csv.reader(csvfile, delimiter=";")
 
             for row in csv_reader:
                 try:
