@@ -1,5 +1,4 @@
 import json
-
 from fastapi import FastAPI
 import psycopg2
 from json import JSONDecoder, JSONEncoder
@@ -8,6 +7,29 @@ import os
 app = FastAPI()
 DATABASE_URL = os.environ['DATABASE_URL']
 
+
+@app.get("/autocomplete_data")
+async def get_autocomplete_data():
+    connection = psycopg2.connect(DATABASE_URL)
+    cursor = connection.cursor()
+
+    cursor.execute("SELECT name, supplier_id FROM suppliers")
+    # data = [row[0] for row in cursor.fetchall()]
+    data = {row[0]: row[1] for row in cursor.fetchall()}
+
+    cursor.close()
+    connection.close()
+    return data
+
+
+@app.get("get_gmaps_url/{search_query}")
+async def get_gmaps_url(search_query):
+    base_url = "https://www.google.com/maps/search/?api=1&query="
+    encoded_query = '+'.join(search_query.split())  # Encode search query
+    return base_url + encoded_query
+
+
+# Debug/Helper functions
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
@@ -16,19 +38,6 @@ async def root():
 @app.get("/hello/{name}")
 async def hworld(name: str):
     return {"message": f"hello, {name}"}
-
-
-@app.get("/autocomplete_data")
-async def get_autocomplete_data():
-    connection = psycopg2.connect(DATABASE_URL)
-    cursor = connection.cursor()
-
-    cursor.execute("SELECT name FROM categories")
-    data = [row[0] for row in cursor.fetchall()]
-
-    cursor.close()
-    connection.close()
-    return data
 
 
 @app.get("/import_backup")
@@ -47,11 +56,6 @@ async def import_csv(filepath: str = 'backup.csv'):
         'Paese': 7,
         'Note': 8,
     }
-
-    def generate_google_maps_url(search_query):
-        base_url = "https://www.google.com/maps/search/?api=1&query="
-        encoded_query = '+'.join(search_query.split())  # Encode search query
-        return base_url + encoded_query
 
     try:
         connection = psycopg2.connect(DATABASE_URL)
@@ -83,7 +87,7 @@ async def import_csv(filepath: str = 'backup.csv'):
                 cursor.execute(
                     f'''
                     INSERT INTO suppliers(name, referral, phone_number, other_contacts, email_address, postal_address, gmap_link, notes, cat_id)  
-                    VALUES ('{societa_val}', '{riferimento_val}', '{recapito_val}', '{altri_recapiti_val}', '{email_val}', '{indirizzo_val}', '{generate_google_maps_url(f'{societa_val} {indirizzo_val} {paese_val}')}', '{note_val}', {servizio_val});
+                    VALUES ('{societa_val}', '{riferimento_val}', '{recapito_val}', '{altri_recapiti_val}', '{email_val}', '{indirizzo_val}', '{get_gmaps_url(f'{societa_val} {indirizzo_val} {paese_val}')}', '{note_val}', {servizio_val});
                     '''
                 )
 
@@ -99,7 +103,3 @@ async def import_csv(filepath: str = 'backup.csv'):
     except Exception as e:
         print("An error occurred:", e)
         return False
-
-if __name__ == '__main__':
-    import_csv('')
-
