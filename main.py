@@ -78,7 +78,7 @@ async def import_csv(filepath: str = 'backup.csv'):
 
                 except IndexError as idx_e:
                     print('An IndexError made it impossible to process a row: ', row, idx_e)
-                    return False
+                    return {"Error": f"{row}, {idx_e}"}
 
                 cursor.execute(
                     f'''
