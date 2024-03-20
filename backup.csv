@@ -18,7 +18,7 @@
 8;Vittorio Alfieri - ALLURE 38FT ;;338 25 99 615;;amalfiluxurycharter@gmail.com;;;
 8;Francesco Gagliano - Praiano x Water Taxi;;3398081409;;;;;
 8;BLURIDE - water taxi Capri ;;334 665 2642 Alessia ;;;;;
-8;GENNARO APICELLA 'GEGE';;3475472602;;GOZZO APREA TIPO JERANTO - GOZZO MIMI';;;
+8;GENNARO APICELLA GEGE;;3475472602;;GOZZO APREA TIPO JERANTO - GOZZO MIMI ;;;
 8;GAMBARDELLA ANTONIO (Amalfi Kayak);;3383629520;;info@amalfikayak.com ;;;
 8;ANDREA GRILLO;;3662060867;;BAIA 40FT;;;
 8;ROCCO CARMINE;;3208465476;;PARDO 43 ft;;;
@@ -28,7 +28,7 @@
 11;POSITANO FISHING EXPERIENCE;;+39 366 9586260;;;;;
 12;LA CARAVELLA;;089 871029;;3334537633 Antonio Chef ;"Amalfi (SA) - Via Matteo Camera; ";AMALFI;Chiusura:
 12;IL GLICINE;;089 871012;;Hotel S. Caterina ;;AMALFI;Chiusura: MARTEDI
-12;DA GEMMA;;089 871345;;;"Amalfi (SA) - Via Lorenzo D'Amalfi;";AMALFI;Chiusura:
+12;DA GEMMA;;089 871345;;;"Amalfi (SA) - Via Lorenzo D Amalfi;";AMALFI;Chiusura:
 12;Sensi Restaurant ;;089 871183;;Htl Residence;;AMALFI;Chiusura:
 12;LIDO AZZURRO;;089 871384;;Antonio (prop) 3342818698;"Amalfi (SA) - Lungomare dei Cavalieri; ";AMALFI;Chiusura:
 12;MARINA GRANDE;;089 871129;;;"Amalfi (SA) - Viale Delle Regioni; ";AMALFI;Chiusura: LUNEDI
@@ -38,23 +38,23 @@
 12;DONNA STELLA - PIZZERIA;;366 368 9666;;;;AMALFI;Chiusura:
 12;ACQUOLINA;;089 214 4987;;331 5029004 - Simone ;;AMALFI;Chiusura: MARTEDI
 12;DA Bruno alla CARCARA;;089 830240;;347 4870191 -saturnino_89@hotmail.it;;AMALFI;Chiusura:
-12;DA MARIA;;089 871880;;;"Amalfi (SA) - Via Lorenzo D'Amalfi; ";AMALFI;Chiusura:
+12;DA MARIA;;089 871880;;;"Amalfi (SA) - Via Lorenzo D Amalfi; ";AMALFI;Chiusura:
 12;DA Sorelle RISPOLI;;089 831265;;;"Amalfi (SA) - Via Riulo (frazione Pogerola); ";AMALFI;Chiusura:
 12;DA TERESA;;089 831237;;;"Amalfi (SA) - Via Spiaggia Santa Croce; ";AMALFI;Chiusura:
 12;EOLO;;089 871241;;;"Amalfi (SA) - Via Pantaleone Comite; ";AMALFI;Chiusura:
-12;IL TARI';;089 871832;;;"Amalfi (SA) - Via Pietro Captano;";AMALFI;Chiusura: MARTEDI
+12;IL TARI ;;089 871832;;;"Amalfi (SA) - Via Pietro Captano;";AMALFI;Chiusura: MARTEDI
 12;LA CAPANNINA;;089 871128;;;"Amalfi (SA) - Via Nuova, 10 (Pogerola); ";AMALFI;Chiusura:
 12;LA CARCARA;;089 830206;;;"Amalfi (SA) - Via Castello (Pogerola); ";AMALFI;Chiusura: MARTEDI
 12;LA TAVERNA DEL DUCA;;089 872755;;;"Amalfi (SA) - Largo Spirito Santo;";AMALFI;Chiusura:
 12;LO SMERALDINO;;089 871070;;;"Amalfi (SA) - Piazzale Dei Protontini; ";AMALFI;Chiusura:
-12;SANT'ANDREA;;089 871023;;Regina 3387415332;"Amalfi (SA) - Piazza Duomo; ";AMALFI;Chiusura:
+12;SANT ANDREA;;089 871023;;Regina 3387415332;"Amalfi (SA) - Piazza Duomo; ";AMALFI;Chiusura:
 12;IL CANCELLETTO ;;089 873234 ;;;"Amalfi ( SA ) Piazza dei Dogi ;";AMALFI;Chiusura:
 12;12 TORRE SARACENA c/o HTL Luna;;089 871002;;;"Amalfi (SA) - Via Pantaleone Comite; ";AMALFI;Chiusura:
 12;PIAZZA DUOMO;;089  872849;;;Amalfi - Piazza Duomo;AMALFI;Chiusura:
-12;LA BONTA' DEL CAPO' / POLISPORTIVA;;089 831515 ;;338 8803764- ;;CONCA DEI MARINI;
+12;LA BONTA  DEL CAPO  / POLISPORTIVA;;089 831515 ;;338 8803764- ;;CONCA DEI MARINI;
 12;IPPOCAMPO ;;089 831153;;;Marina 31 - 84010 Conca Dei Marini (SA) · ~19,9 km;CONCA DEI MARINI;
-12; LA TONNARELLA;;089 831939 ;;3395912526 - +39 334 2154265 – +39 334 253 2468;Marina di Conca dei Marini;CONCA DEI MARINI;
-12; ZEFIRO FIORITO;;333 4885203;;Prop.  Mattia Buonocore 3398777349-3343323521;Spiaggia del Saraceno;CONCA DEI MARINI;
+12;LA TONNARELLA;;089 831939 ;;3395912526 - +39 334 2154265 – +39 334 253 2468;Marina di Conca dei Marini;CONCA DEI MARINI;
+12;ZEFIRO FIORITO;;333 4885203;;Prop.  Mattia Buonocore 3398777349-3343323521;Spiaggia del Saraceno;CONCA DEI MARINI;
 12;RISORGIMENTO;;089 831897;;;;CONCA DEI MARINI;
 12;ZASS - SAN PIETRO hotel;;089 875455 /812080 ;;;v. Laurito, 2;POSITANO;
 12;LA SERRA - HTL AGAVI ;;089 875733;;;;POSITANO;
@@ -72,10 +72,10 @@
 12;IL COVO DEI SARACENI ;;089 875400;;;Via Regina Giovanna;POSITANO;
 12;DA ADOLFO (LUNCH);;089 875022;;Sergio 3355368442;Spiaggia di Laurito;POSITANO;
 12;CARUSO by HTL Caruso;;089 8588890;;;piazza S. Giovanni del Toro, 2;RAVELLO;
-12;ROSSELLINI' S - H. Palazzo Avino ;;089 818181;;;v. S. Giovanni del toro, 28;RAVELLO;
+12;ROSSELLINIS - H. Palazzo Avino ;;089 818181;;;v. S. Giovanni del toro, 28;RAVELLO;
 12;FLAUTO DI PAN- HOTEL Villa Cimbrone;;089 857459;;;;RAVELLO;
 12;GARDEN;;089 857226;;;v. Boccaccio, 4 ;RAVELLO;
-12;CUMPA' COSIMO;;089 857156;;;v. Roma, 44;RAVELLO;
+12;CUMPA COSIMO;;089 857156;;;v. Roma, 44;RAVELLO;
 12;DA SALVATORE;;089 857227;;;v. della Repubblica, 2;RAVELLO;Chiuso il: LUNEDI
 12;VILLA MARIA;;089 857255;;;v. S. Chiara, 2;RAVELLO;
 12;DA MIMI - PIZZERIA ;;089 857134;;;via San Francesco 12 - 84010 Ravello (SA);RAVELLO;
@@ -83,9 +83,9 @@
 12;IL PIRATA;;089 874377;;;Marina di Praia - Praiano;PRAIANO;
 12;ALFONSO A MARE;;089 874 091;;;Marina di Praia - Praiano;PRAIANO;
 12;DA ARMANDINO;;089 874087;;;Marina di Praia - Praiano;PRAIANO;
-12;A’ PARANZA;;089 871840;;;via Traversa Dragone, 1 ;ATRANI;
+12;A PARANZA;;089 871840;;;via Traversa Dragone, 1 ;ATRANI;
 12;TORRE NORMANNA;;089 877100;;info@torrenormanna.net ;Via Diego Taiani 4, Strada Statale 163, Maiori ;MAIORI;
-12;IL FARO DI CAPO D' ORSO;;089 877022;;;v. D. Taiani - Maiori    ;MAIORI;
+12;IL FARO DI CAPO D  ORSO;;089 877022;;;v. D. Taiani - Maiori    ;MAIORI;
 12;IL GIARDINIELLO ;;089 877050;;;Corso Vittorio Emanuele, 17 - 8401 Minori ;MINORI;
 12;ACQUA PAZZA;;089 261606;;;Corso Garibaldi, 38 - Cetara ;CETARA;
 12;SAN PIETRO;;089 261091;;;Piazza S. Francesco, 2 - Cetara;CETARA;
@@ -93,7 +93,7 @@
 12;DA LORENZO - TRATTORIA;;089 858290;;;Via Fra Gerardo Sasso, 4 - SCALA;SCALA;
 12;ANTICO BORGO ;;089 871469;;;VIA Noce , 4 Pontone di Scala ;SCALA;
 12;NAPOLI PIZZA ;;;;;;NAPOLI;
-12;50 KALO’ ;;081 19204667;;;Piazza Sannazzaro 201 (Mergellina);NAPOLI;
+12;50 KALO ;;081 19204667;;;Piazza Sannazzaro 201 (Mergellina);NAPOLI;
 12;CIRO A SANTA BRIGIDA;;081 5524072;;;Via Santa Brigida (Ingresso Est Gall. Umberto);NAPOLI;Chiuso il: DOMENICA
 12;DA MICHELE (no prenotazioni);;081 681524;;;Via Cesare Sersale 1-3 (Forcella - Porta Nolana);NAPOLI;Chiuso il: DOMENICA
 12;PELLONE;;081 5538614;;;Via Nazionale (Zona Stazione Centrale);NAPOLI;Chiuso il: DOMENICA
@@ -112,7 +112,7 @@
 12;AL GROTTINO ;;081 8370584;;;via Longano, 27;CAPRI;
 12;DA LUIGI;;081 8370591;;;via Faraglioni;CAPRI;
 12;12 LE MONZU - HTL PUNTA TRAGARA ;;081 8370844;;;Via Tragara, 57 - 80073 Capri (NA);CAPRI;
-12;12 MAMMA' ;;081 8370844;;;;AMALFI;
+12;12 MAMMA  ;;081 8370844;;;;AMALFI;
 13;TAXI AMALFI COLONNINA;;089 872239 - 334 538 7847;;;;;
 13;Matteo Cavaliere;;3393711463;;3284232298 Enzo Anastasio;;;
 13;Marcello Taxi ;;3381931402;;3319783534 Daniele;;;
@@ -203,7 +203,7 @@
 15;spider life style ;;333 992 51 41 Sergio;+39 081 218 48 00;;;;
 15;SALVATORE RENT A SCOOTER;;3384883667;;;;;
 15;100ALLORA NOLEGGIO FERRARI E SPORTCAR;;3396647568;;a.benedetti@100allora.com;;;
-15;PRAIANO RENT SCOOTER;;334.35 96 ﻿873 /089 874583;;;;;Elide Vespa - CC Authform in cartella concierge
+15;PRAIANO RENT SCOOTER;;334.35 96873 /089 874583;;;;;Elide Vespa - CC Authform in cartella concierge
 16;PERRELLI ANDREA;;333 569 4382 ;;;;;
 16;ANTONIO ANASTASIO (SUPREMO) SCOOTER;;3396710756;;;;;
 17;GUIDE ESCURSIONISTICHE ;;385 605550;;;;PONTONE;BOX OFFICE VALLE DELLE FERRIERE ( PONTONE)
@@ -234,7 +234,7 @@
 19;violino ; LUCIBELLO GIOVANNI;347 6296964 - 089 873036;;;;;
 19;violino ; Rosario macchiarulo ;3476467009;;;;;
 19;arpa;Maria Caccioppoli;345 9930844;;;;;
-19;mandolino;Franco ('O mericano);3349646349;;;;;
+19;mandolino;Franco ( O mericano);3349646349;;;;;
 19;varie;Marco Cantarella ;3285665184;;;;;
 19;Chitarra e Mandolino ;Verdoliva Federico ;;;info@federicoverdoliva.it;;;
 19;SAX-CHITARRA;ALFREDO INTAGLIATO;366 260 1742;;;;;
@@ -250,12 +250,12 @@
 21;Conca dei Marini;;089831102;3483575538;;;;
 21;Amalfi - Piazza Duomo;;089871045;;;;;
 21;Amalfi - Piazza Dei Dogi ;;089871063;;;;;
-21; dott Giovanni Torre;;3336584837;;info@analisisanfrancescoamalfi.it;;;Tamponi covid: consegne risultati : lunedi , mercoledi e venerdi
-21; DOTT. Guadagno ;;338 970 4967;;;;;Tamponi covid
+21;dott Giovanni Torre;;3336584837;;info@analisisanfrancescoamalfi.it;;;Tamponi covid: consegne risultati : lunedi , mercoledi e venerdi
+21;DOTT. Guadagno ;;338 970 4967;;;;;Tamponi covid
 21;Dott. Alessandro Frate ;;3383757514;;alexfrate@hotmail.it ;;;Tamponi covid
 22;Ario Avecone;;3391505818;;;;;
 22;segr. Avecone - Flora ;;3317927876;;;;;
-22;Vincenzo D'Amora;;3334048367;0813906440 studio S. M la Carità;;;;
+22;Vincenzo D Amora;;3334048367;0813906440 studio S. M la Carità;;;;
 23;SARA;;371 4308321;;;;;
 23;MATTIA MAUTONE;;3299791763;;;;;
 23;EMILIANA SORRENTINO;;3398059019;;;;;
@@ -267,7 +267,7 @@
 23;JENNIFER DAHL;;+16477250943;;jennifer.dahl@merrithew.com;;;
 23;NICKY BELL;;3395279333 - whatsapp +1.416.937.0470;theforeignbell@gmail.com;;;;
 25;GIANPAOLO ORZA;;3661524922;;;;;€ 65 PER LEZIONE c/o Polisportiva
-26;ILARIA CUOMO;;3388279364;;;;;Uso palestra 10 € all'ora - chiuso di mattina ma disponibile ad aprire
+26;ILARIA CUOMO;;3388279364;;;;;Uso palestra 10 € all ora - chiuso di mattina ma disponibile ad aprire
 27;Da Adolfo;;089 875022;Sergio 335 5368442;;;;
 27;Piattaforma di Conca;;3382051848 Sig. Gianfranco  ;3496401275 Sig. Gaetano Buonocore;;;;
 27;FIORDO FURORE;;333 688 38 98 Luigi Perrelli;;;;;
@@ -295,18 +295,18 @@
 12;BUONOCORE;;0818377826;;;via V. Emanuele;CAPRI;Chiusura: martedì
 12;CAPRI ;;0818370003;;;via Roma, 71;CAPRI;
 12;CAPRI MOON;;0818370266;;;via  Marina Grande, 88;CAPRI;8377953
-12;CAPRI'S ;;0818377108;;;;CAPRI;
+12;CAPRI S ;;0818377108;;;;CAPRI;
 12;DA GEMMA;;0818370461;;;via Madre Serafina;CAPRI;Chiusura: lunedì
 12;DA GIORGIO;;0818370898;;;via Roma, 34;CAPRI;
 12;DA LUIGI;;0818370591;;;via Faraglioni;CAPRI;
 12;DA TONINO;;0818376718;;;via Dentecala;CAPRI;
-12;E' DIVINO;;081 8378364;;;via Sella Orta, 10/A;CAPRI;
-12;EDODE';;0818388242;;;via Camerelle, 81;CAPRI;
+12;è DIVINO;;081 8378364;;;via Sella Orta, 10/A;CAPRI;
+12;EDODE ;;0818388242;;;via Camerelle, 81;CAPRI;
 12;FARAGLIONI;;0818370320;;;via Camerelle, 75;CAPRI;
 12;FRATELLI CAPONE;;0818379054;;;v. Gradoni Sopramonte, 6;CAPRI;
 12;IL BIZANTINO - H. PUNTA TRAGARA;;0818370844;;;via Tragara, 57;CAPRI;
 12;IL CAPRICCIO DI TIBERIO;;0818376485;;;via Tiberio;CAPRI;
-12;IL TINELLO;;0818377673;;;via L' Abate, 3;CAPRI;Chiusura: dom. a pranzo
+12;IL TINELLO;;0818377673;;;via L  Abate, 3;CAPRI;Chiusura: dom. a pranzo
 12;ISIDORO;;0818377252;;;via Roma, 19;CAPRI;Chiusura: giovedì
 12;LA CANTINELLA (IL GERANIO);;0818370616;;;viale Matteotti, 8;CAPRI;Chiusura: martedì
 12;LA CAPANNINA ;;0818370732;;;via Le Botteghe,12;CAPRI;
@@ -324,7 +324,7 @@
 12;LONGANO;;0818370187;;;via Longano, 9;CAPRI;
 12;MEDJ PUB;;0818375148;;;via M. Serena, 9;CAPRI;
 12;MISTER BILLY;;0818377642;;;via Le Botteghe,46;CAPRI;
-12;OJNE';;0818389473;;;via Sella Orta, 10;CAPRI;
+12;OJNè;;0818389473;;;via Sella Orta, 10;CAPRI;
 12;PULALLI WINE BAR;;0818374108;;;Piazza Umberto, 1;CAPRI;
 12;QUISI - H. QUISISANA ;;0818370788;;;via Camerelle, 2;CAPRI;
 12;REGINA CRISTINA;;0818370744;;;via F. Serena, 20;CAPRI;
@@ -335,13 +335,13 @@
 12;VERGINIELLO;;0818370944;;;via Lo Palazzo, 25;CAPRI;
 12;TERRAZZA BRUNELLA;;0818370122;;;via Tragara, 24;CAPRI;
 12;VILLAVERDE;;3398785139;;;via Sella Orta, 6;CAPRI;Franco Lembo
-12;AL GALLO D'ORO;;0818370853;;;via Marina Grande, 23;CAPRI;MARINA GRANDE
+12;AL GALLO D ORO;;0818370853;;;via Marina Grande, 23;CAPRI;MARINA GRANDE
 12;BAGNI SMERALDO;;0818377212;;;via Marina Grande;CAPRI;MARINA GRANDE
 12;BAGNI TIBERIO;;0818377688;;;via Palazzo a Mare;CAPRI;MARINA GRANDE
 12;DA FRANCESCO;;0818376490;;;via c. Colombo;CAPRI;"MARINA GRANDE; Resp. Preno Michela 340 4000 304"
 12;DA PAOLINO;;0818376102;;; via Palazzo a Mare, 11;CAPRI;MARINA GRANDE
 12;EUROPA - DA PEPPINO;;0818370344;;;via C. Colombo, 2;CAPRI;MARINA GRANDE
-12;L'APPRODO;;0818378990;;;P.tta Ferraro;CAPRI;"MARINA GRANDE; chiusura: mercoledì"
+12;L APPRODO;;0818378990;;;P.tta Ferraro;CAPRI;"MARINA GRANDE; chiusura: mercoledì"
 12;LE ONDINE;;0818375453;;;via Marina Grande;CAPRI;MARINA GRANDE
 12;NUOVO ZODIACO;;0818376332;;;P.tta Ferraro, 2;CAPRI;MARINA GRANDE
 12;DA GIOIA;;0818377702;;;via Marina Piccola;CAPRI;MARINA PICCOLA
@@ -349,13 +349,13 @@
 12;LA CANZONE DEL MARE;;0818370104;;;via Marina Piccola;CAPRI;MARINA PICCOLA
 12;LA PIAZZETTA;;0818377827;;;via Marina Piccola;CAPRI;"MARINA PICCOLA; chiusura: martedì"
 12;LE SIRENE;;0818370221;;;via Marina Piccola;CAPRI;MARINA PICCOLA
-12;ONDA D'ORO;;0818370698;;;via Marina Piccola;CAPRI;"MARINA PICCOLA; chiusura: giovedì"
+12;ONDA D ORO;;0818370698;;;via Marina Piccola;CAPRI;"MARINA PICCOLA; chiusura: giovedì"
 12;TERRAZZA CIRO A MARE;;0818370264;;;via Marina Piccola;CAPRI;MARINA PICCOLA
 12;TORRE SARACENA;;0818370646;;;via Krupp;CAPRI;MARINA PICCOLA
 12;A CURTIGLIA;;0818373334;;;via Nuova del Faro, 86;ANACAPRI;
 12;RICCIO By  H. Capri Palace;;0818371380;;;via Grotta azzurra;ANACAPRI;
-12;AGORA' wine bar;;0818372018;;;P.za Caprile, 1;ANACAPRI;Chiusura settimanale: martedì
-12;AL NIDO D'ORO;;0818372148;;;V.le De Tommaso;ANACAPRI;Chiusura settimanale: mercoledì
+12;AGORA wine bar;;0818372018;;;P.za Caprile, 1;ANACAPRI;Chiusura settimanale: martedì
+12;AL NIDO D ORO;;0818372148;;;V.le De Tommaso;ANACAPRI;Chiusura settimanale: mercoledì
 12;AUMM AUMM;;0818373000;;;via Caprile, 18 ;ANACAPRI;
 12;BARBAROSSA;;0818371483;;;via Porta;ANACAPRI;
 12;BELLAVISTA;;0818371463;;;via G. Orlandi, 10;ANACAPRI;
@@ -371,11 +371,11 @@
 12;LE ARCATE;;0818373325;;;Viale De Tommaso, 24;ANACAPRI;
 12;LE TERRAZZE;;0818373302;;;via Capodimonte, 11;ANACAPRI;
 12;LIDO DEL FARO;;0818371798;;;Punta Carena;ANACAPRI;
-12;L' OLIVO - H. Capri Palace;;0819780111;;;via Capodimonte, 2 b;ANACAPRI;
+12;L OLIVO - H. Capri Palace;;0819780111;;;via Capodimonte, 2 b;ANACAPRI;
 12;MAMMA GIOVANNA;;0818372057;;;via Chiusarano, 6;ANACAPRI;
 12;MATERITA;;0818373375;;;via G. Orlandi;ANACAPRI;
 12;NETTUNO;;0818371362;;;via Grotta azzurra;ANACAPRI;
-12;THE TROLLS' ;;0818382013;;;via Caprile, 1;ANACAPRI;
+12;THE TROLLS;;0818382013;;;via Caprile, 1;ANACAPRI;
 28;Aliscafi SNAV;;081 4285555 / 7612348 - Fax. 4285259;;;;NAPOLI;Napoli / Molo Beverello
 28;Aliscafi SNAV;;081 8377577 - Fax. ;;;;CAPRI;Capri - Marina Grande
 28;Caremar;;081 5513882 / 5805111 - Fax. 5514551;;;;NAPOLI;Napoli / Molo Beverello
@@ -389,13 +389,13 @@
 28;Linee Marittime Partenopee;;081 8073024;;;;;
 28;Taxi del Mare;;Numero Verde 800-547500;;;;SORRENTO;via Degli Aranci - Sorrento
 28;Volaviamare informazioni;;081 497 22 22;;;;;
-28;Capri info   ;;0818376995;;;;;
-28;Amalfi info ;;089873301;;;;AMALFI;Alicoast 089 871483
+28;Capri info;;0818376995;;;;;
+28;Amalfi info;;089873301;;;;AMALFI;Alicoast 089 871483
 28;Gescab - Biglietteria Sorrento ;;081 8781430;;;;;
 28;TravelMar ;;089 872950;;;;;
 28;POSITANOJET;;089875032/811164;;;;AMALFI;biglietteria amalfi 089 7019150 - 1° box lato esterno
 28;Travelmar inf ;;089.872950;;;;;
-28;Forio d' ischia info ;;081.5071345  ;;;;;
+28;Forio d ischia info ;;081.5071345  ;;;;;
 28;Ischia Porto info ;;081.991888;;;;;
 28;Napoli Mergellina info ;;081.7614909  ;;;;;
 28;Napoli Beverello info.;;081.5523236  ;;;;;
@@ -422,7 +422,7 @@
 30;Emergenze in Mare, Guardia Costiera;;1530;;;;;
 30;CCISS Viaggiare Informati, informazioni su Traffico e Viabilità;;1518;;;;;
 30;Unità di Crisi del Ministero degli Affari Esteri;;063 6225;;;;;
-31;Ospedale Oo.rr. S.giovanni di Dio e Ruggi D'aragona ;;089 301203 - 089 301110;;;;;
+31;Ospedale Oo.rr. S.giovanni di Dio e Ruggi D aragona ;;089 301203 - 089 301110;;;;;
 31;PRONTO SOCCORSO - Castiglione di Ravello ;;089 873151;;;;;
 31;GUARDIA MEDICA ;;089 871449;;;;;
 22;Dott. Cesare Sormani ;;089831517 - 3483572770;;;;;Di Conca, viene per i nostri ospiti
