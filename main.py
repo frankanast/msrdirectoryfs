@@ -61,11 +61,13 @@ async def import_csv(filepath: str = 'backup.csv'):
         print("An error occurred:", e)
         return False
 
+    '''
     cursor.execute("SELECT name FROM categories")
     data = [row[0] for row in cursor.fetchall()]
 
     cursor.close()
     connection.close()
+    '''
 
 if __name__ == '__main__':
     import_csv('')
