@@ -66,7 +66,7 @@ async def import_csv(filepath: str = 'backup.csv'):
 
             for row in csv_reader:
                 try:
-                    servizio_val = row[INDICES['Servizio']] or None
+                    servizio_val = int(row[INDICES['Servizio']]) if str(row[INDICES['Servizio']]).isdigit() else 999
                     societa_val = row[INDICES['Società']] or None
                     riferimento_val = row[INDICES['Riferimento']] or None
                     recapito_val = row[INDICES['Recapito']] or None
@@ -83,7 +83,7 @@ async def import_csv(filepath: str = 'backup.csv'):
                 cursor.execute(
                     f'''
                     INSERT INTO suppliers(name, referral, phone_number, other_contacts, email_address, postal_address, gmap_link, notes, cat_id)  
-                    VALUES ('{societa_val}', '{riferimento_val}', '{recapito_val}', '{altri_recapiti_val}', '{email_val}', '{indirizzo_val}', '{generate_google_maps_url(f'{societa_val} {indirizzo_val} {paese_val}')}', '{note_val}', {servizio_val});
+                    VALUES ('{societa_val}', '{riferimento_val}', '{recapito_val}', '{altri_recapiti_val}', '{email_val}', '{indirizzo_val}', '{generate_google_maps_url(f'{societa_val} {indirizzo_val} {paese_val}')}', '{note_val}', {int(servizio_val) or 999});
                     '''
                 )
 
