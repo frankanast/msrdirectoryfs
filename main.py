@@ -50,7 +50,7 @@ async def import_csv(filepath: str = 'backup.csv'):
             str_ = str()  # debug
 
             for row in csv_reader:
-                str_ += str(row)
+                str_ += f"{row}\n"
 
             return str_
 
