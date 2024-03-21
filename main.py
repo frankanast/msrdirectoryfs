@@ -24,14 +24,34 @@ async def get_autocomplete_data():
 @app.get("/record/{supplier_id}")
 async def get_supplier_data(supplier_id):
     #  --> {"id": 1, "name": "SupplierName", ..., "specific_attributes": [...]}
-    connection = psycopg2.connect(DATABASE_URL)
-    cursor = connection.cursor()
+    try:
+        connection = psycopg2.connect(DATABASE_URL)
+        cursor = connection.cursor()
 
-    # TODO: COMPLETE!
+        cursor.execute("SELECT * FROM suppliers")
+        records = cursor.fetchall()
 
-    cursor.close()
-    connection.close()
-    return {}
+        columns = [
+            "supplier_id", "name", "referral", "phone_number", "other_contacts",
+            "email_address", "postal_address", "gmap_link", "ranking", "notes", "cat_id"
+        ]
+
+        data = []
+        for row in records:
+            item = {}
+            for idx, column in enumerate(columns):
+                item[column] = row[idx]
+            data.append(item)
+
+        return data
+
+    except (Exception, psycopg2.Error) as error:
+        print("Error while fetching data from PostgreSQL", error)
+
+    finally:
+        if connection:
+            cursor.close()
+            connection.close()
 
 
 @app.get("get_gmaps_url/{search_query}")
