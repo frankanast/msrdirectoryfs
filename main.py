@@ -29,7 +29,7 @@ def fetch_supplier(supplier_id: int) -> Dict[str, Any]:
 
         if "cat_id" in properties.keys():
             # We need this only for debug and better readability
-            cursor.execute("SELECT name FROM categories WHERE cat_id = %id", (properties["cat_id"],))
+            cursor.execute(f"SELECT name FROM categories WHERE cat_id = {properties['cat_id']}")
             cat_name = cursor.fetchone()
             properties["cat_name"] = cat_name
 
@@ -37,6 +37,9 @@ def fetch_supplier(supplier_id: int) -> Dict[str, Any]:
             cursor.execute("SELECT caption FROM field_mapping_view WHERE cat_id = %c", (properties["cat_id"]))
             captions = cursor.fetchall()
             specifics = {captions[i]: "" for i in range(len(captions))}  # TODO: cONTINUE DEVELOPING THIS METHOD
+        else:
+            properties["cat_name"] = "Uncategorized"
+            specifics = {}
 
         return {"supplier_id": supplier_id, "properties": properties, "specifics": specifics}
 
