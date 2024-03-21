@@ -14,12 +14,24 @@ async def get_autocomplete_data():
     cursor = connection.cursor()
 
     cursor.execute("SELECT name, supplier_id FROM suppliers")
-    # data = [row[0] for row in cursor.fetchall()]
     data = {row[0]: row[1] for row in cursor.fetchall()}
 
     cursor.close()
     connection.close()
     return data
+
+
+@app.get("/record/{supplier_id}")
+async def get_supplier_data(supplier_id):
+    #  --> {"id": 1, "name": "SupplierName", ..., "specific_attributes": [...]}
+    connection = psycopg2.connect(DATABASE_URL)
+    cursor = connection.cursor()
+
+    # TODO: COMPLETE!
+
+    cursor.close()
+    connection.close()
+    return {}
 
 
 @app.get("get_gmaps_url/{search_query}")
