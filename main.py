@@ -10,7 +10,7 @@ app = FastAPI()
 DATABASE_URL = os.environ['DATABASE_URL']
 
 
-def fetch_data() -> List[dict]:
+def fetch_supplier(supplier_id: int) -> dict:
     try:
         connection = psycopg2.connect(DATABASE_URL)
         cursor = connection.cursor()
@@ -18,7 +18,7 @@ def fetch_data() -> List[dict]:
         cursor.execute("SELECT column_name FROM information_schema.columns WHERE table_name = 'suppliers'")
         columns = [row[0] for row in cursor.fetchall()]
 
-        cursor.execute("SELECT * FROM suppliers")
+        cursor.execute("SELECT * FROM suppliers WHERE supplier_id = %s", (supplier_id, ))
         records = cursor.fetchall()
 
         data = []
@@ -28,7 +28,7 @@ def fetch_data() -> List[dict]:
                 item[column] = row[idx]
             data.append(item)
 
-        return data
+        return {"supplier_id": supplier_id, "properties": data}
 
     except (Exception, psycopg2.Error) as error:
         print("Error while fetching data from PostgreSQL", error)
@@ -52,12 +52,10 @@ async def get_autocomplete_data():
     return data
 
 
-@app.get("/suppliers")
-async def get_suppliers():
-    #  --> {"id": 1, "name": "SupplierName", ..., "specific_attributes": [...]}
-    data = fetch_data()
-    return {"properties": data}
-
+@app.get("/parse_properties/{supplier_id}")
+async def get_supplier_id(supplier_id: int):
+    data = fetch_supplier(supplier_id)
+    return data
 
 @app.get("get_gmaps_url/{search_query}")
 async def get_gmaps_url(search_query):
