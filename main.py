@@ -18,7 +18,7 @@ def fetch_supplier(supplier_id: int) -> dict:
         cursor.execute("SELECT column_name FROM information_schema.columns WHERE table_name = 'suppliers'")
         columns = [row[0] for row in cursor.fetchall()]
 
-        cursor.execute("SELECT * FROM suppliers WHERE supplier_id = %s", (supplier_id, ))
+        cursor.execute("SELECT * FROM suppliers WHERE supplier_id = %s", (supplier_id,))
         records = cursor.fetchall()
 
         data = []
@@ -29,15 +29,12 @@ def fetch_supplier(supplier_id: int) -> dict:
             data.append(item)
 
         return {"supplier_id": supplier_id, "properties": data}
-
     except (Exception, psycopg2.Error) as error:
         print("Error while fetching data from PostgreSQL", error)
-
     finally:
         if connection:
             cursor.close()
             connection.close()
-
 
 @app.get("/autocomplete_data")
 async def get_autocomplete_data():
@@ -54,8 +51,10 @@ async def get_autocomplete_data():
 
 @app.get("/parse_properties/{supplier_id}")
 async def get_supplier_id(supplier_id: int):
+    # Returns supplier info for the given id
     data = fetch_supplier(supplier_id)
     return data
+
 
 @app.get("get_gmaps_url/{search_query}")
 async def get_gmaps_url(search_query):
