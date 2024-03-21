@@ -36,6 +36,7 @@ def fetch_supplier(supplier_id: int) -> dict:
             cursor.close()
             connection.close()
 
+
 @app.get("/autocomplete_data")
 async def get_autocomplete_data():
     connection = psycopg2.connect(DATABASE_URL)
