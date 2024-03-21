@@ -25,7 +25,7 @@ def fetch_supplier(supplier_id: int) -> Dict[str, Any]:
         properties = {columns[i]: result[i] for i in range(len(columns))}
 
         if "supplier_id" in properties.keys():
-            properties.pop(["supplier_id"])
+            properties.pop("supplier_id")
 
         if "cat_id" in properties.keys():
             # We need this only for debug and better readability
