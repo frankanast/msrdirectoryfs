@@ -1,7 +1,5 @@
-import json
-from typing import List
-
-from fastapi import FastAPI
+from typing import Dict, Any
+from fastapi import FastAPI, HTTPException
 import psycopg2
 from json import JSONDecoder, JSONEncoder
 import os
@@ -10,30 +8,25 @@ app = FastAPI()
 DATABASE_URL = os.environ['DATABASE_URL']
 
 
-def fetch_supplier(supplier_id: int) -> dict:
+def fetch_supplier(supplier_id: int) -> Dict[str, Any]:
+    connection = None
     try:
         connection = psycopg2.connect(DATABASE_URL)
         cursor = connection.cursor()
 
-        cursor.execute("SELECT column_name FROM information_schema.columns WHERE table_name = 'suppliers'")
-        columns = [row[0] for row in cursor.fetchall()]
-
         cursor.execute("SELECT * FROM suppliers WHERE supplier_id = %s", (supplier_id,))
-        records = cursor.fetchall()
+        result = cursor.fetchone()
 
-        data = []
-        for row in records:
-            item = {}
-            for idx, column in enumerate(columns):
-                item[column] = row[idx]
-            data.append(item)
+        if result is None:
+            raise HTTPException(status_code=404, detail="Supplier not found")
 
-        return {"supplier_id": supplier_id, "properties": data}
-    except (Exception, psycopg2.Error) as error:
-        print("Error while fetching data from PostgreSQL", error)
+        columns = [desc[0] for desc in cursor.description]
+        properties = {columns[i]: result[i] for i in range(len(columns))}
+
+        return {"supplier_id": supplier_id, "properties": properties}
     finally:
-        if connection:
-            cursor.close()
+        cursor.close()
+        if connection is not None:
             connection.close()
 
 
