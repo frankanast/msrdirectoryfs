@@ -1,4 +1,6 @@
 import json
+from typing import List
+
 from fastapi import FastAPI
 import psycopg2
 from json import JSONDecoder, JSONEncoder
@@ -8,33 +10,16 @@ app = FastAPI()
 DATABASE_URL = os.environ['DATABASE_URL']
 
 
-@app.get("/autocomplete_data")
-async def get_autocomplete_data():
-    connection = psycopg2.connect(DATABASE_URL)
-    cursor = connection.cursor()
-
-    cursor.execute("SELECT name, supplier_id FROM suppliers")
-    data = {row[0]: row[1] for row in cursor.fetchall()}
-
-    cursor.close()
-    connection.close()
-    return data
-
-
-@app.get("/record/{supplier_id}")
-async def get_supplier_data(supplier_id):
-    #  --> {"id": 1, "name": "SupplierName", ..., "specific_attributes": [...]}
+def fetch_data() -> List[dict]:
     try:
         connection = psycopg2.connect(DATABASE_URL)
         cursor = connection.cursor()
 
+        cursor.execute("SELECT column_name FROM information_schema.columns WHERE table_name = 'suppliers'")
+        columns = [row[0] for row in cursor.fetchall()]
+
         cursor.execute("SELECT * FROM suppliers")
         records = cursor.fetchall()
-
-        columns = [
-            "supplier_id", "name", "referral", "phone_number", "other_contacts",
-            "email_address", "postal_address", "gmap_link", "ranking", "notes", "cat_id"
-        ]
 
         data = []
         for row in records:
@@ -52,6 +37,26 @@ async def get_supplier_data(supplier_id):
         if connection:
             cursor.close()
             connection.close()
+
+
+@app.get("/autocomplete_data")
+async def get_autocomplete_data():
+    connection = psycopg2.connect(DATABASE_URL)
+    cursor = connection.cursor()
+
+    cursor.execute("SELECT name, supplier_id FROM suppliers")
+    data = {row[0]: row[1] for row in cursor.fetchall()}
+
+    cursor.close()
+    connection.close()
+    return data
+
+
+@app.get("/suppliers")
+async def get_suppliers():
+    #  --> {"id": 1, "name": "SupplierName", ..., "specific_attributes": [...]}
+    data = fetch_data()
+    return {"properties": data}
 
 
 @app.get("get_gmaps_url/{search_query}")
