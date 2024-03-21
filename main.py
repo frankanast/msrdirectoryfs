@@ -20,10 +20,26 @@ def fetch_supplier(supplier_id: int) -> Dict[str, Any]:
         if result is None:
             raise HTTPException(status_code=404, detail="Supplier not found")
 
+        # Parse standard properties
         columns = [desc[0] for desc in cursor.description]
         properties = {columns[i]: result[i] for i in range(len(columns))}
 
-        return {"supplier_id": supplier_id, "properties": properties}
+        if "supplier_id" in properties.keys():
+            properties.pop(["supplier_id"])
+
+        if "cat_id" in properties.keys():
+            # We need this only for debug and better readability
+            cursor.execute("SELECT name FROM categories WHERE cat_id = %id", (properties["cat_id"],))
+            cat_name = cursor.fetchone()
+            properties["cat_name"] = cat_name
+
+            # Add category-specific properties (supplier_fields); 999 is a fallback value
+            cursor.execute("SELECT caption FROM field_mapping_view WHERE cat_id = %c", (properties["cat_id"]))
+            captions = cursor.fetchall()
+            specifics = {captions[i]: "" for i in range(len(captions))}  # TODO: cONTINUE DEVELOPING THIS METHOD
+
+        return {"supplier_id": supplier_id, "properties": properties, "specifics": specifics}
+
     finally:
         cursor.close()
         if connection is not None:
@@ -43,7 +59,7 @@ async def get_autocomplete_data():
     return data
 
 
-@app.get("/parse_properties/{supplier_id}")
+@app.get("/get_supplier/{supplier_id}")
 async def get_supplier_id(supplier_id: int):
     # Returns supplier info for the given id
     data = fetch_supplier(supplier_id)
