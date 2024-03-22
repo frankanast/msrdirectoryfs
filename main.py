@@ -27,7 +27,7 @@ def fetch_supplier(supplier_id: int) -> Dict[str, Any]:
     try:
         connection = psycopg2.connect(DATABASE_URL)
 
-        cursor = connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        cursor = connection.cursor()
         cursor.execute("SELECT * FROM suppliers WHERE supplier_id = %s", (supplier_id,))
 
         try:
@@ -40,8 +40,10 @@ def fetch_supplier(supplier_id: int) -> Dict[str, Any]:
         except (TypeError, ValueError):
             print(f'Tried to convert {id_val} to int, but it is a type {type(id_val)}')
             pass
+        cursor.close()
 
         # Standard properties ("standards" for brevity)
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         cursor.execute(
             '''
             SELECT
@@ -51,12 +53,13 @@ def fetch_supplier(supplier_id: int) -> Dict[str, Any]:
             ''',
             (id_val,)
         )
-        standards = cursor.fetchall()
 
+        standards = cursor.fetchall()
 
         # Category-specfic custom properties ("customs" for brevity)
         cursor.execute('SELECT field_name, field_value FROM custom_properties WHERE supplier_id = %s', (id_val,))
-        customs = {row[0]: row[1] for row in cursor.fetchall()}
+        # customs = {row[0]: row[1] for row in cursor.fetchall()}
+        customs = cursor.fetchall()
 
         return {"supplier_id": id_val, "standard_properties": standards, "custom_properties": customs}
 
