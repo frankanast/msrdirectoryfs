@@ -1,69 +1,12 @@
 from typing import Dict, Any
 from fastapi import FastAPI, HTTPException
 import psycopg2
+import psycopg2.extras
 from json import JSONDecoder, JSONEncoder
 import os
 
 app = FastAPI()
 DATABASE_URL = os.environ['DATABASE_URL']
-
-
-# def fetch_supplier(supplier_id: int) -> Dict[str, Any]:
-#     connection = None
-#
-#     if isinstance(supplier_id, str):
-#         try:
-#             supplier_id = int(supplier_id)
-#         except TypeError:
-#             raise HTTPException(status_code=404, detail="Supplier not found")
-#
-#     elif not isinstance(supplier_id, int):
-#         raise HTTPException(status_code=404, detail="Supplier not found")
-#
-#     else:  # is int
-#         pass
-#
-#     try:
-#         connection = psycopg2.connect(DATABASE_URL)
-#         cursor = connection.cursor()
-#
-#         # The problematic part starts from here...
-#         cursor.execute("SELECT * FROM suppliers WHERE supplier_id = %s", (supplier_id,))
-#
-#         try:
-#             id_val = cursor.fetchone()[0]
-#         except (IndexError, TypeError):
-#             raise HTTPException(status_code=404, detail="Supplier not found")
-#
-#         try:
-#             id_val = int(id_val)
-#         except (TypeError, ValueError):
-#             print(f'Tried to convert {id_val} to int, but it is a type {type(id_val)}')
-#             pass
-#
-#         # Standard properties ("standards" for brevity)
-#         cursor.execute(
-#             '''
-#             SELECT
-#                 name, referral, phone_number, other_contacts, email_address,
-#                 postal_address, gmap_link, gmap_coordinates, website, ranking, notes, cat_id
-#             FROM suppliers WHERE supplier_id = %s
-#             ''',
-#             (id_val,)
-#         )
-#         standards = {row[0]: row[1] for row in cursor.fetchall()}
-#         #... and ends here.
-#
-#         # Category-specfic custom properties ("customs" for brevity)
-#         cursor.execute('SELECT field_name, field_value FROM custom_properties WHERE supplier_id = %s', (id_val,))
-#         customs = {row[0]: row[1] for row in cursor.fetchall()}
-#
-#         return {"supplier_id": id_val, "standard_properties": standards, "custom_properties": customs}
-#
-#     finally:
-#         cursor.close()
-#         if connection is not None:
-#             connection.close()
 
 
 def fetch_supplier(supplier_id: int) -> Dict[str, Any]:
@@ -72,43 +15,53 @@ def fetch_supplier(supplier_id: int) -> Dict[str, Any]:
     if isinstance(supplier_id, str):
         try:
             supplier_id = int(supplier_id)
-        except ValueError:
-            raise HTTPException(status_code=404, detail="Supplier ID must be an integer")
+        except TypeError:
+            raise HTTPException(status_code=404, detail="Supplier not found")
 
     elif not isinstance(supplier_id, int):
-        raise HTTPException(status_code=404, detail="Supplier ID must be an integer")
+        raise HTTPException(status_code=404, detail="Supplier not found")
+
+    else:  # is int
+        pass
 
     try:
         connection = psycopg2.connect(DATABASE_URL)
-        cursor = connection.cursor()
 
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         cursor.execute("SELECT * FROM suppliers WHERE supplier_id = %s", (supplier_id,))
-        supplier_row = cursor.fetchone()
 
-        if not supplier_row:
+        try:
+            id_val = cursor.fetchone()[0]
+        except (IndexError, TypeError):
             raise HTTPException(status_code=404, detail="Supplier not found")
 
-        # Extract the supplier_id as an integer
-        id_val = int(supplier_row[0])
+        try:
+            id_val = int(id_val)
+        except (TypeError, ValueError):
+            print(f'Tried to convert {id_val} to int, but it is a type {type(id_val)}')
+            pass
 
-        # Standard properties
-        standard_properties_query = '''
-            SELECT 
-                name, referral, phone_number, other_contacts, email_address, 
-                postal_address, gmap_link, gmap_coordinates, website, ranking, notes, cat_id 
+        # Standard properties ("standards" for brevity)
+        cursor.execute(
+            '''
+            SELECT
+                name, referral, phone_number, other_contacts, email_address,
+                postal_address, gmap_link, gmap_coordinates, website, ranking, notes, cat_id
             FROM suppliers WHERE supplier_id = %s
-        '''
-        cursor.execute(standard_properties_query, (id_val,))
-        standard_properties = {row[0]: row[1] for row in cursor.fetchall()}
+            ''',
+            (id_val,)
+        )
+        standards = cursor.fetchall()
 
-        # Category-specific custom properties
-        custom_properties_query = 'SELECT field_name, field_value FROM custom_properties WHERE supplier_id = %s'
-        cursor.execute(custom_properties_query, (id_val,))
-        custom_properties = {row[0]: row[1] for row in cursor.fetchall()}
 
-        return {"supplier_id": id_val, "standard_properties": standard_properties, "custom_properties": custom_properties}
+        # Category-specfic custom properties ("customs" for brevity)
+        cursor.execute('SELECT field_name, field_value FROM custom_properties WHERE supplier_id = %s', (id_val,))
+        customs = {row[0]: row[1] for row in cursor.fetchall()}
+
+        return {"supplier_id": id_val, "standard_properties": standards, "custom_properties": customs}
 
     finally:
+        cursor.close()
         if connection is not None:
             connection.close()
 
