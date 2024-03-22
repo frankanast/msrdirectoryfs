@@ -54,17 +54,18 @@ def fetch_supplier(supplier_id: int) -> Dict[str, Any]:
             (id_val,)
         )
 
-        standards = cursor.fetchall()
+        standards = cursor.fetchone()
+        cursor.close()
 
         # Category-specfic custom properties ("customs" for brevity)
+        connection.cursor()
         cursor.execute('SELECT field_name, field_value FROM custom_properties WHERE supplier_id = %s', (id_val,))
-        # customs = {row[0]: row[1] for row in cursor.fetchall()}
-        customs = cursor.fetchall()
+        customs = {row[0]: row[1] for row in cursor.fetchall()}
+        cursor.close()
 
         return {"supplier_id": id_val, "standard_properties": standards, "custom_properties": customs}
 
     finally:
-        cursor.close()
         if connection is not None:
             connection.close()
 
