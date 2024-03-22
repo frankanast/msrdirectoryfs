@@ -26,7 +26,6 @@ def fetch_supplier(supplier_id: int) -> Dict[str, Any]:
 
     try:
         connection = psycopg2.connect(DATABASE_URL)
-
         cursor = connection.cursor()
         cursor.execute("SELECT * FROM suppliers WHERE supplier_id = %s", (supplier_id,))
 
@@ -58,7 +57,7 @@ def fetch_supplier(supplier_id: int) -> Dict[str, Any]:
         cursor.close()
 
         # Category-specfic custom properties ("customs" for brevity)
-        connection.cursor()
+        cursor = connection.cursor()
         cursor.execute('SELECT field_name, field_value FROM custom_properties WHERE supplier_id = %s', (id_val,))
         customs = {row[0]: row[1] for row in cursor.fetchall()}
         cursor.close()
