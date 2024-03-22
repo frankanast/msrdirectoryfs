@@ -18,10 +18,7 @@ def fetch_supplier(supplier_id: int) -> Dict[str, Any]:
 
         try:
             id_val = cursor.fetchone()[0]
-        except IndexError:
-            raise HTTPException(status_code=404, detail="Supplier not found")
-
-        if id_val is None:
+        except (IndexError, TypeError):
             raise HTTPException(status_code=404, detail="Supplier not found")
 
         try:
