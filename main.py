@@ -15,33 +15,34 @@ def fetch_supplier(supplier_id: int) -> Dict[str, Any]:
         cursor = connection.cursor()
 
         cursor.execute("SELECT * FROM suppliers WHERE supplier_id = %s", (supplier_id,))
-        result = cursor.fetchone()
+        id_val = cursor.fetchone()
 
-        if result is None:
+        if id_val is None:
             raise HTTPException(status_code=404, detail="Supplier not found")
 
-        # Parse standard properties
-        columns = [desc[0] for desc in cursor.description]
-        properties = {columns[i]: result[i] for i in range(len(columns))}
+        try:
+            id_val = int(id_val)
+        except (TypeError, ValueError):
+            print(f'Tried to convert {id_val} to int, but it is a type {type(id_val)}')
+            pass
 
-        if "supplier_id" in properties.keys():
-            properties.pop("supplier_id")
+        # Standard properties
+        cursor.execute(
+            '''
+            SELECT 
+                name, referral, phone_number, other_contacts, email_address, 
+                postal_address, gmap_link, gmap_coordinates, website, ranking, notes, cat_id 
+            FROM suppliers WHERE supplier_id = %s
+            ''',
+            (id_val,)
+        )
+        properties = {row[0]: row[1] for row in cursor.fetchall()}
 
-        if "cat_id" in properties.keys():
-            # We need this only for debug and better readability
-            cursor.execute("SELECT name FROM categories WHERE cat_id = %s", (properties["cat_id"],))
-            cat_name = cursor.fetchone()
-            properties["cat_name"] = cat_name
+        # Category-specfic properties
+        cursor.execute('SELECT field_name, field_value FROM custom_properties WHERE supplier_id = %s', (id_val,))
+        specifics = {row[0]: row[1] for row in cursor.fetchall()}
 
-            # Add category-specific properties (supplier_fields); 999 is a fallback value
-            cursor.execute("SELECT caption FROM field_mapping_view WHERE cat_id = %s", (properties["cat_id"],))
-            captions = cursor.fetchall()
-            specifics = {captions[i]: "" for i in range(len(captions))}  # TODO: cONTINUE DEVELOPING THIS METHOD
-        else:
-            properties["cat_name"] = "Uncategorized"
-            specifics = {}
-
-        return {"supplier_id": supplier_id, "properties": properties, "specifics": specifics}
+        return {"supplier_id": id_val, "properties": properties, "specifics": specifics}
 
     finally:
         cursor.close()
