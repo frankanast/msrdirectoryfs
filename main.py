@@ -10,6 +10,19 @@ DATABASE_URL = os.environ['DATABASE_URL']
 
 def fetch_supplier(supplier_id: int) -> Dict[str, Any]:
     connection = None
+
+    if isinstance(supplier_id, str):
+        try:
+            supplier_id = int(supplier_id)
+        except TypeError:
+            raise HTTPException(status_code=404, detail="Supplier not found")
+
+    elif not isinstance(supplier_id, int):
+        raise HTTPException(status_code=404, detail="Supplier not found")
+
+    else:  # is int
+        pass
+
     try:
         connection = psycopg2.connect(DATABASE_URL)
         cursor = connection.cursor()
@@ -27,7 +40,7 @@ def fetch_supplier(supplier_id: int) -> Dict[str, Any]:
             print(f'Tried to convert {id_val} to int, but it is a type {type(id_val)}')
             pass
 
-        # Standard properties
+        # Standard properties ("standards" for brevity)
         cursor.execute(
             '''
             SELECT 
@@ -37,13 +50,13 @@ def fetch_supplier(supplier_id: int) -> Dict[str, Any]:
             ''',
             (id_val,)
         )
-        properties = {row[0]: row[1] for row in cursor.fetchall()}
+        standards = {row[0]: row[1] for row in cursor.fetchall()}
 
-        # Category-specfic properties
+        # Category-specfic custom properties ("customs" for brevity)
         cursor.execute('SELECT field_name, field_value FROM custom_properties WHERE supplier_id = %s', (id_val,))
-        specifics = {row[0]: row[1] for row in cursor.fetchall()}
+        customs = {row[0]: row[1] for row in cursor.fetchall()}
 
-        return {"supplier_id": id_val, "properties": properties, "specifics": specifics}
+        return {"supplier_id": id_val, "standard_properties": standards, "custom_properties": customs}
 
     finally:
         cursor.close()
