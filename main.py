@@ -15,7 +15,11 @@ def fetch_supplier(supplier_id: int) -> Dict[str, Any]:
         cursor = connection.cursor()
 
         cursor.execute("SELECT * FROM suppliers WHERE supplier_id = %s", (supplier_id,))
-        id_val = cursor.fetchone()
+
+        try:
+            id_val = cursor.fetchone()[0]
+        except IndexError:
+            raise HTTPException(status_code=404, detail="Supplier not found")
 
         if id_val is None:
             raise HTTPException(status_code=404, detail="Supplier not found")
