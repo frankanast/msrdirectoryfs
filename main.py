@@ -101,10 +101,9 @@ async def get_supplier_id(supplier_id: int):
 
 
 @app.get("/suppliers")
-async def get_suppliers(supplier_id: int):
+async def get_suppliers():
     # Returns all suppliers with complete details
-    data = fetch_supplier(supplier_id)
-    return data
+    fetch_suppliers()
 
 
 @app.get("get_gmaps_url/{search_query}")
