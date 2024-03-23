@@ -108,13 +108,13 @@ def get_grid_data():
             """
             SELECT
                 s.supplier_id,
-                s.name,
+                s.name AS supplier_name,
                 s.referral,
                 s.phone_number,
                 s.email_address,
                 s.gmap_link,
                 s.ranking,
-                c.name,
+                c.name AS category_name,
                 c.hex_bg_color,
                 c.hex_fg_color
             FROM suppliers s
