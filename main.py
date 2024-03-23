@@ -94,6 +94,7 @@ def fetch_suppliers():
         if connection:
             connection.close()
 
+
 def get_grid_data():
     try:
         connection = psycopg2.connect(DATABASE_URL)
