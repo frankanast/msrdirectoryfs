@@ -94,6 +94,40 @@ def fetch_suppliers():
         if connection:
             connection.close()
 
+def get_grid_data():
+    try:
+        connection = psycopg2.connect(DATABASE_URL)
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+
+    except (ConnectionError, psycopg2.Error, psycopg2.DatabaseError):
+        raise HTTPException(status_code=404, detail="No Database connection")
+
+    else:
+        cursor.execute(
+            """
+            SELECT
+                s.supplier_id,
+                s.name,
+                s.referral,
+                s.phone_number,
+                s.email_address,
+                s.gmap_link,
+                s.ranking,
+                c.name,
+                c.hex_bg_color,
+                c.hex_fg_color
+            FROM suppliers s
+            INNER JOIN categories c
+            ON s.cat_id = c.cat_id;
+            """
+        )
+
+        return cursor.fetchall()
+
+    finally:
+        if connection:
+            connection.close()
+
 
 @app.get("/autocomplete_data")
 async def get_autocomplete_data():
@@ -107,6 +141,11 @@ async def get_autocomplete_data():
     connection.close()
     return data
 
+
+@app.get("/grid_data")
+async def grid_data():
+    data = get_grid_data()
+    return data
 
 @app.get("/supplier/{supplier_id}")
 async def get_supplier_id(supplier_id: int):
