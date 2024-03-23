@@ -2,7 +2,6 @@ from typing import Dict, Any
 from fastapi import FastAPI, HTTPException
 import psycopg2
 import psycopg2.extras
-from json import JSONDecoder, JSONEncoder
 import os
 
 app = FastAPI()
@@ -69,6 +68,18 @@ def fetch_supplier(supplier_id: int) -> Dict[str, Any]:
             connection.close()
 
 
+def fetch_suppliers():
+    try:
+        connection = psycopg2.connect("hello world")
+        cursor = connection.cursor()
+    except (psycopg2.Error, psycopg2.DatabaseError):
+        return "hello, world"
+
+    cursor.close()
+    if connection:
+        connection.close()
+
+
 @app.get("/autocomplete_data")
 async def get_autocomplete_data():
     connection = psycopg2.connect(DATABASE_URL)
@@ -82,9 +93,16 @@ async def get_autocomplete_data():
     return data
 
 
-@app.get("/get_supplier/{supplier_id}")
+@app.get("/supplier/{supplier_id}")
 async def get_supplier_id(supplier_id: int):
     # Returns supplier info for the given id
+    data = fetch_supplier(supplier_id)
+    return data
+
+
+@app.get("/suppliers")
+async def get_suppliers(supplier_id: int):
+    # Returns all suppliers with complete details
     data = fetch_supplier(supplier_id)
     return data
 
