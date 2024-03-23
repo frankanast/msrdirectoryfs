@@ -88,6 +88,8 @@ def fetch_suppliers():
             except IndexError:
                 data.append({"supplier_id": id_, "error": "IndexError occurred."})
 
+        return data
+
     finally:
         if connection:
             connection.close()
