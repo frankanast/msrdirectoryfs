@@ -70,14 +70,27 @@ def fetch_supplier(supplier_id: int) -> Dict[str, Any]:
 
 def fetch_suppliers():
     try:
-        connection = psycopg2.connect("hello world")
+        connection = psycopg2.connect(DATABASE_URL)
         cursor = connection.cursor()
-    except (psycopg2.Error, psycopg2.DatabaseError):
-        return "hello, world"
 
-    cursor.close()
-    if connection:
-        connection.close()
+    except (ConnectionError, psycopg2.Error, psycopg2.DatabaseError):
+        raise HTTPException(status_code=404, detail="No Database connection")
+
+    else:
+        cursor.execute("SELECT supplier_id FROM suppliers")
+        ids = cursor.fetchall()
+
+        data = []
+        for id_ in ids:
+            try:
+                parsed_row = fetch_supplier(id_[0])
+                data.append(parsed_row)
+            except IndexError:
+                data.append({"supplier_id": id_, "error": "IndexError occurred."})
+
+    finally:
+        if connection:
+            connection.close()
 
 
 @app.get("/autocomplete_data")
