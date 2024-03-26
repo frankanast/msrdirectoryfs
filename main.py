@@ -144,11 +144,16 @@ async def get_autocomplete_data():
     cursor = connection.cursor()
 
     cursor.execute("SELECT name, supplier_id FROM suppliers")
-    data = {row[0]: row[1] for row in cursor.fetchall()}
+    #data = {row[0]: row[1] for row in cursor.fetchall()}
+    data = []
+
+    for i in cursor.fetchall():
+        supplier_item = {'id': i[0], 'name': i[1]}
+        data.append(supplier_item)
 
     cursor.close()
     connection.close()
-    return data
+    return {data}
 
 
 @app.get("/grid_data")
