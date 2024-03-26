@@ -153,7 +153,7 @@ async def get_autocomplete_data():
 
     cursor.close()
     connection.close()
-    return {data}
+    return data
 
 
 @app.get("/grid_data")
