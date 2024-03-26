@@ -146,7 +146,7 @@ async def get_autocomplete_data():
     cursor.execute("SELECT name, supplier_id FROM suppliers")
     data = []
 
-    for i in cursor.fetchmany(10):
+    for i in cursor.fetchall():
         supplier_item = {'id': i[1], 'name': i[0]}
         data.append(supplier_item)
 
