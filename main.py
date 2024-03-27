@@ -154,6 +154,28 @@ async def get_autocomplete_data():
     connection.close()
     return data
 
+@app.get("/autocomplete_test")
+async def get_autocomplete_data():
+    connection = psycopg2.connect(DATABASE_URL)
+    cursor = connection.cursor()
+
+    cursor.execute("SELECT * FROM autocomplete_view")
+    data = []
+
+    for i in cursor.fetchall():
+        supplier_item = {
+            'id': i[0],
+            'name': i[1],
+            'category': i[3],
+            'background_color': i[4],
+            'foreground_color': i[5]
+        }
+        data.append(supplier_item)
+
+    cursor.close()
+    connection.close()
+    return data
+
 
 @app.get("/grid_data")
 async def grid_data():
