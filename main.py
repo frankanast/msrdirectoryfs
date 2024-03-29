@@ -122,7 +122,7 @@ def get_grid_data():
                 s.email_address,
                 s.gmap_link,
                 s.ranking,
-                c.name AS category_name,
+                c.abbreviation AS category_name,
                 c.hex_bg_color,
                 c.hex_fg_color
             FROM suppliers s
@@ -154,8 +154,10 @@ async def get_autocomplete_data():
     connection.close()
     return data
 
+
 @app.get("/autocomplete_test")
 async def get_autocomplete_data():
+    # TODO: Safe-delete in production
     connection = psycopg2.connect(DATABASE_URL)
     cursor = connection.cursor()
 
