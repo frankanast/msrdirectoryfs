@@ -124,7 +124,8 @@ def get_grid_data():
                 s.ranking,
                 c.abbreviation AS category_name,
                 c.hex_bg_color,
-                c.hex_fg_color
+                c.hex_fg_color,
+                c.icon
             FROM suppliers s
             INNER JOIN categories c
             ON s.cat_id = c.cat_id;
