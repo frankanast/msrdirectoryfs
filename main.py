@@ -120,7 +120,7 @@ def get_grid_data():
                 s.referral,
                 s.phone_number,
                 s.email_address,
-                s.other_contacts,
+                /*s.other_contacts,*/
                 s.gmap_link,
                 s.ranking,
                 c.abbreviation AS category_name,
