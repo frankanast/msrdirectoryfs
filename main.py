@@ -171,13 +171,12 @@ async def get_grid_data():
             """
         )
 
-        return cursor.fetchmany()
+        return cursor.fetchmany(10)
 
     finally:
         if connection:
             connection.close()
             print("hello, world")
-
 
 @app.get("/autocomplete_data")
 async def get_autocomplete_data():
