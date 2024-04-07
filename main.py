@@ -176,6 +176,7 @@ async def get_grid_data():
     finally:
         if connection:
             connection.close()
+            print("hello, world")
 
 
 @app.get("/autocomplete_data")
