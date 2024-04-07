@@ -123,7 +123,8 @@ def get_grid_data():
                 s.other_contacts,
                 s.gmap_link,
                 s.ranking,
-                c.abbreviation AS category_name,
+                c.abbreviation AS category_abbr,
+                c.name as category_name,
                 c.hex_bg_color,
                 c.hex_fg_color,
                 c.icon
