@@ -1,11 +1,15 @@
 from typing import Dict, Any
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, File, UploadFile
+from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 import psycopg2
 import psycopg2.extras
 import os
+import shutil
 
 app = FastAPI()
+
+# TODO : do we need cors, really?!?!?!
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # Change this to the list of allowed origins
@@ -281,3 +285,26 @@ async def import_csv(filepath: str = 'backup.csv'):
     except Exception as e:
         print("An error occurred:", e)
         return False
+
+
+@app.post("/uploadpic/")
+async def create_upload_file(file: UploadFile = File(...)):
+    # Because this method is ASYNCHRONOUS, the server will not freeze while picture is uploading
+    # Upload requirements:
+    # * Maximum 1MB.
+    # * Image formats accepted: JPEG, PNG, GIF.
+
+    file.file.seek(0, os.SEEK_END)
+    file_size = file.file.tell()
+    file.file.seek(0, 0)
+    if file_size > 1 * 1024 * 1024:
+        raise HTTPException(status_code=413, detail="File too large")
+
+    valid_extensions = (".jpg", ".jpeg", ".png", ".gif")
+    if not file.filename.lower().endswith(valid_extensions):
+        raise HTTPException(status_code=400, detail="Invalid file extension")
+
+    with open(f"assets/{file.filename}", "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+
+    return {"filename": file.filename}
