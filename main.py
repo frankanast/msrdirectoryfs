@@ -293,6 +293,9 @@ async def create_upload_file(file: UploadFile = File(...)):
     # * Maximum 1MB.
     # * Image formats accepted: JPEG, PNG, GIF.
 
+    assets_dir = "assets"
+    os.makedirs(assets_dir, exist_ok=True)
+
     file.file.seek(0, os.SEEK_END)
     file_size = file.file.tell()
     file.file.seek(0, 0)
