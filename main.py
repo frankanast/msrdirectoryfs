@@ -25,6 +25,24 @@ SFTP_USERNAME = os.getenv('SFTP_USERNAME')
 SFTP_PASSWORD = os.getenv('SFTP_PASSWORD')
 
 
+def sftp_upload_file(file_path, filename):
+    transport = paramiko.Transport((SFTP_HOST, SFTP_PORT))
+    sftp = None
+    try:
+        transport.connect(username=SFTP_USERNAME, password=SFTP_PASSWORD)
+        sftp = paramiko.SFTPClient.from_transport(transport)
+        sftp.put(file_path, f'/profilepics/{filename}')
+
+    except Exception as e:
+        print(f"Failed to upload file due to: {e}")
+
+    finally:
+        if sftp is not None:
+            sftp.close()
+        transport.close()
+        os.remove(file_path)
+
+
 def fetch_supplier(supplier_id: int) -> Dict[str, Any]:
     connection = None
 
@@ -194,20 +212,6 @@ async def get_gmaps_url(search_query):
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
-
-
-def sftp_upload_file(file_path, filename):
-    transport = paramiko.Transport((SFTP_HOST, SFTP_PORT))
-    try:
-        transport.connect(username=SFTP_USERNAME, password=SFTP_PASSWORD)
-        sftp = paramiko.SFTPClient.from_transport(transport)
-
-        # Change '/upload/path/' to the actual path where you want to upload the file
-        sftp.put(file_path, f'/profilepics/{filename}')
-    finally:
-        sftp.close()
-        transport.close()
-        os.remove(file_path)  # Clean up the temp file
 
 
 @app.post("/uploadpic/")
