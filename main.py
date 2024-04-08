@@ -1,5 +1,6 @@
 from typing import Dict, Any
 from fastapi import FastAPI, HTTPException, File, UploadFile, BackgroundTasks
+from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 import psycopg2
 import psycopg2.extras
@@ -11,10 +12,10 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Change this to the list of allowed origins
+    allow_origins=["https://msrfirectory-fe-f7d11facf977.herokuapp.com", "http://localhost:3000"],  # Allow specific origins (or use ["*"] for all origins)
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE"],
-    allow_headers=["*"],
+    allow_methods=["*"],  # Allow all methods
+    allow_headers=["*"],  # Allow all headers
 )
 
 DATABASE_URL = os.environ['DATABASE_URL']
@@ -22,6 +23,7 @@ SFTP_HOST = os.getenv('SFTP_HOST')
 SFTP_PORT = 22
 SFTP_USERNAME = os.getenv('SFTP_USERNAME')
 SFTP_PASSWORD = os.getenv('SFTP_PASSWORD')
+IMAGE_DIR = "www/profilepics"
 
 
 def fetch_supplier(supplier_id: int) -> Dict[str, Any]:
@@ -210,6 +212,7 @@ def sftp_upload_file(file_path, filename):
         sftp.put(file_path, f'www/profilepics/{filename}')
     except Exception as e:
         print(f"Failed to upload file due to: {e}. Filepath: {file_path}. Filename: {filename}.")
+
     finally:
         if sftp:
             sftp.close()
@@ -229,3 +232,11 @@ async def create_upload_file(background_tasks: BackgroundTasks, file: UploadFile
     background_tasks.add_task(sftp_upload_file, temp_file_path, file.filename)
 
     return {"filename": file.filename, "detail": "File upload initiated. The file will be uploaded in the background."}
+
+
+@app.get("/images/{image_name}")
+async def get_image(image_name: str):
+    image_path = os.path.join(IMAGE_DIR, image_name)
+    if not os.path.isfile(image_path):
+        raise HTTPException(status_code=404, detail="Image not found")
+    return FileResponse(image_path)
