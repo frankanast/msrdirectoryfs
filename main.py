@@ -232,11 +232,3 @@ async def create_upload_file(background_tasks: BackgroundTasks, file: UploadFile
     background_tasks.add_task(sftp_upload_file, temp_file_path, file.filename)
 
     return {"filename": file.filename, "detail": "File upload initiated. The file will be uploaded in the background."}
-
-
-@app.get("/images/{image_name}")
-async def get_image(image_name: str):
-    image_path = os.path.join(IMAGE_DIR, image_name)
-    if not os.path.isfile(image_path):
-        raise HTTPException(status_code=404, detail="Image not found")
-    return FileResponse(image_path)
