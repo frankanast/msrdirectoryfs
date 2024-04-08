@@ -4,8 +4,6 @@ from fastapi.middleware.cors import CORSMiddleware
 import psycopg2
 import psycopg2.extras
 import os
-import shutil
-import aiofiles
 import paramiko
 
 app = FastAPI()
@@ -34,7 +32,7 @@ def sftp_upload_file(file_path, filename):
         sftp.put(file_path, f'/profilepics/{filename}')
 
     except Exception as e:
-        print(f"Failed to upload file due to: {e}")
+        print(f"Failed to upload file due to: {e}. Filepath: {file_path}. Filename: {filename}.")
 
     finally:
         if sftp is not None:
