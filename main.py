@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import psycopg2
 import psycopg2.extras
 import os
+import tempfile
 import paramiko
 
 app = FastAPI()
@@ -21,24 +22,6 @@ SFTP_HOST = os.getenv('SFTP_HOST')
 SFTP_PORT = 22
 SFTP_USERNAME = os.getenv('SFTP_USERNAME')
 SFTP_PASSWORD = os.getenv('SFTP_PASSWORD')
-
-
-def sftp_upload_file(file_path, filename):
-    transport = paramiko.Transport((SFTP_HOST, SFTP_PORT))
-    sftp = None
-    try:
-        transport.connect(username=SFTP_USERNAME, password=SFTP_PASSWORD)
-        sftp = paramiko.SFTPClient.from_transport(transport)
-        sftp.put(file_path, f'/profilepics/{filename}')
-
-    except Exception as e:
-        print(f"Failed to upload file due to: {e}. Filepath: {file_path}. Filename: {filename}.")
-
-    finally:
-        if sftp is not None:
-            sftp.close()
-        transport.close()
-        os.remove(file_path)
 
 
 def fetch_supplier(supplier_id: int) -> Dict[str, Any]:
@@ -212,16 +195,40 @@ async def root():
     return {"message": "Hello World"}
 
 
+def sftp_upload_file(file_path, filename):
+    transport = paramiko.Transport((SFTP_HOST, SFTP_PORT))
+    sftp = None
+    try:
+        transport.connect(username=SFTP_USERNAME, password=SFTP_PASSWORD)
+        sftp = paramiko.SFTPClient.from_transport(transport)
+
+        # Check if the file exists before upload
+        if not os.path.exists(file_path):
+            print(f"File does not exist: {file_path}")
+            return
+
+        sftp.put(file_path, f'profilepics/{filename}')
+    except Exception as e:
+        print(f"Failed to upload file due to: {e}. Filepath: {file_path}. Filename: {filename}.")
+    finally:
+        if sftp:
+            sftp.close()
+        transport.close()
+        if os.path.exists(file_path):
+            os.remove(file_path)  # Clean up the temp file after an upload attempt
+
+
 @app.post("/uploadpic/")
 async def create_upload_file(background_tasks: BackgroundTasks, file: UploadFile = File(...)):
-    temp_file_path = f"temp_{file.filename}"
+    # Use a dedicated temporary file to avoid name conflicts and ensure it's in a writable directory
+    temp_file = tempfile.NamedTemporaryFile(delete=False)
+    temp_file_path = temp_file.name
     content = await file.read()
+    temp_file.write(content)
+    temp_file.close()  # Important to close the file to flush writes and avoid locking issues
 
-    # Save the file temporarily
-    with open(temp_file_path, 'wb') as temp_file:
-        temp_file.write(content)
-
-    # Use a background task to handle the SFTP upload, so it doesn't block everything
+    # Now the file is saved, and we have an absolute path to it
+    # Schedule the SFTP upload as a background task
     background_tasks.add_task(sftp_upload_file, temp_file_path, file.filename)
 
     return {"filename": file.filename, "detail": "File upload initiated. The file will be uploaded in the background."}
