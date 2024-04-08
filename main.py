@@ -1,15 +1,15 @@
 from typing import Dict, Any
-from fastapi import FastAPI, HTTPException, File, UploadFile
-from fastapi.responses import HTMLResponse
+from fastapi import FastAPI, HTTPException, File, UploadFile, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 import psycopg2
 import psycopg2.extras
 import os
 import shutil
+import aiofiles
+import paramiko
 
 app = FastAPI()
 
-# TODO : do we need cors, really?!?!?!
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # Change this to the list of allowed origins
@@ -17,7 +17,12 @@ app.add_middleware(
     allow_methods=["GET", "POST", "PUT", "DELETE"],
     allow_headers=["*"],
 )
+
 DATABASE_URL = os.environ['DATABASE_URL']
+SFTP_HOST = os.getenv('SFTP_HOST')
+SFTP_PORT = 22
+SFTP_USERNAME = os.getenv('SFTP_USERNAME')
+SFTP_PASSWORD = os.getenv('SFTP_PASSWORD')
 
 
 def fetch_supplier(supplier_id: int) -> Dict[str, Any]:
@@ -160,31 +165,6 @@ async def get_autocomplete_data():
     connection.close()
     return data
 
-
-@app.get("/autocomplete_test")
-async def get_autocomplete_data():
-    # TODO: Safe-delete in production
-    connection = psycopg2.connect(DATABASE_URL)
-    cursor = connection.cursor()
-
-    cursor.execute("SELECT * FROM autocomplete_view")
-    data = []
-
-    for i in cursor.fetchall():
-        supplier_item = {
-            'id': i[0],
-            'name': i[1],
-            'category': i[3],
-            'background_color': i[4],
-            'foreground_color': i[5]
-        }
-        data.append(supplier_item)
-
-    cursor.close()
-    connection.close()
-    return data
-
-
 @app.get("/grid_data")
 async def grid_data():
     data = get_grid_data()
@@ -211,106 +191,35 @@ async def get_gmaps_url(search_query):
     return base_url + encoded_query
 
 
-# Debug/Helper functions
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
 
 
-@app.get("/hello/{name}")
-async def hworld(name: str):
-    return {"message": f"hello, {name}"}
-
-
-@app.get("/import_backup")
-async def import_csv(filepath: str = 'backup.csv'):
-    # For internal use only (for now). Imports a CSV directory in the Heroku database.
-    # We only work with CSS and Gmaps URLs in this place, so we import the library and declare the function locally.
-    import csv
-    INDICES = {
-        'Servizio': 0,
-        'Società': 1,
-        'Riferimento': 2,
-        'Recapito': 3,
-        'Altri recapiti': 4,
-        'Email': 5,
-        'Indirizzo': 6,
-        'Paese': 7,
-        'Note': 8,
-    }
-
+def sftp_upload_file(file_path, filename):
+    transport = paramiko.Transport((SFTP_HOST, SFTP_PORT))
     try:
-        connection = psycopg2.connect(DATABASE_URL)
-        cursor = connection.cursor()
-    except (ConnectionError, ConnectionRefusedError, ConnectionAbortedError) as conn_e:
-        print('A connection error occurred: ', conn_e)
-        return False
+        transport.connect(username=SFTP_USERNAME, password=SFTP_PASSWORD)
+        sftp = paramiko.SFTPClient.from_transport(transport)
 
-    try:
-        with open(filepath, 'r', newline='') as csvfile:
-            csv_reader = csv.reader(csvfile, delimiter=";")
-
-            for row in csv_reader:
-                try:
-                    servizio_val = int(row[INDICES['Servizio']]) if str(row[INDICES['Servizio']]).isdigit() else 999
-                    societa_val = row[INDICES['Società']] or None
-                    riferimento_val = row[INDICES['Riferimento']] or None
-                    recapito_val = row[INDICES['Recapito']] or None
-                    altri_recapiti_val = row[INDICES['Altri recapiti']] or None
-                    email_val = row[INDICES['Email']] or None
-                    indirizzo_val = row[INDICES['Indirizzo']] or None
-                    paese_val = row[INDICES['Paese']] or None
-                    note_val = row[INDICES['Note']] or None
-
-                except IndexError as idx_e:
-                    print('An IndexError made it impossible to process a row: ', row, idx_e)
-                    return {"Error": f"{row}, {idx_e}"}
-
-                cursor.execute(
-                    f'''
-                    INSERT INTO suppliers(name, referral, phone_number, other_contacts, email_address, postal_address, gmap_link, notes, cat_id)  
-                    VALUES ('{societa_val}', '{riferimento_val}', '{recapito_val}', '{altri_recapiti_val}', '{email_val}', '{indirizzo_val}', '{get_gmaps_url(f'{societa_val} {indirizzo_val} {paese_val}')}', '{note_val}', {servizio_val});
-                    '''
-                )
-
-            connection.commit()
-            cursor.close()
-            connection.close()
-            return True
-
-    except FileNotFoundError:
-        print("File not found.")
-        return False
-
-    except Exception as e:
-        print("An error occurred:", e)
-        return False
+        # Change '/upload/path/' to the actual path where you want to upload the file
+        sftp.put(file_path, f'/profilepics/{filename}')
+    finally:
+        sftp.close()
+        transport.close()
+        os.remove(file_path)  # Clean up the temp file
 
 
 @app.post("/uploadpic/")
-async def create_upload_file(file: UploadFile = File(...)):
-    # Because this method is ASYNCHRONOUS, the server will not freeze while picture is uploading
-    # Upload requirements:
-    # * Maximum 1MB.
-    # * Image formats accepted: JPEG, PNG, GIF.
+async def create_upload_file(background_tasks: BackgroundTasks, file: UploadFile = File(...)):
+    temp_file_path = f"temp_{file.filename}"
+    content = await file.read()
 
-    assets_dir = "assets"
-    os.makedirs(assets_dir, exist_ok=True)
+    # Save the file temporarily
+    with open(temp_file_path, 'wb') as temp_file:
+        temp_file.write(content)
 
-    # Proceed with the file size and extension checks
-    file.file.seek(0, os.SEEK_END)
-    file_size = file.file.tell()
-    file.file.seek(0, 0)
-    if file_size > 1 * 1024 * 1024:  # 1MB
-        raise HTTPException(status_code=413, detail="File too large")
+    # Use a background task to handle the SFTP upload, so it doesn't block everything
+    background_tasks.add_task(sftp_upload_file, temp_file_path, file.filename)
 
-    valid_extensions = (".jpg", ".jpeg", ".png", ".gif")
-    if not file.filename.lower().endswith(valid_extensions):
-        raise HTTPException(status_code=400, detail="Invalid file extension")
-
-    # Save the file within the assets directory
-    file_path = os.path.join(assets_dir, file.filename)
-    with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
-
-    return {"filename": file.filename}
+    return {"filename": file.filename, "detail": "File upload initiated. The file will be uploaded in the background."}
