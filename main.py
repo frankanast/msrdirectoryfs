@@ -207,7 +207,7 @@ def sftp_upload_file(file_path, filename):
             print(f"File does not exist: {file_path}")
             return
 
-        sftp.put(file_path, f'profilepics/{filename}')
+        sftp.put(file_path, f'www/profilepics/{filename}')
     except Exception as e:
         print(f"Failed to upload file due to: {e}. Filepath: {file_path}. Filename: {filename}.")
     finally:
@@ -220,15 +220,12 @@ def sftp_upload_file(file_path, filename):
 
 @app.post("/uploadpic/")
 async def create_upload_file(background_tasks: BackgroundTasks, file: UploadFile = File(...)):
-    # Use a dedicated temporary file to avoid name conflicts and ensure it's in a writable directory
     temp_file = tempfile.NamedTemporaryFile(delete=False)
     temp_file_path = temp_file.name
     content = await file.read()
     temp_file.write(content)
-    temp_file.close()  # Important to close the file to flush writes and avoid locking issues
+    temp_file.close()
 
-    # Now the file is saved, and we have an absolute path to it
-    # Schedule the SFTP upload as a background task
     background_tasks.add_task(sftp_upload_file, temp_file_path, file.filename)
 
     return {"filename": file.filename, "detail": "File upload initiated. The file will be uploaded in the background."}
