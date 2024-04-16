@@ -126,23 +126,22 @@ def fetch_categories():
         ids = cursor.fetchall()
 
         data = []
-        for id_ in ids:
-            try:
-                for row in ids:
-                    cat_id, name, hex_bg_color, hex_fg_color, abbreviation, icon = row
-                    data.append({
-                        "id": cat_id,
-                        "properties": {
-                            "name": name,
-                            "hex_bg_color": hex_bg_color,
-                            "hex_fg_color": hex_fg_color,
-                            "abbreviation": abbreviation,
-                            "icon": icon
-                        }
-                    })
+        try:
+            for row in ids:
+                cat_id, name, hex_bg_color, hex_fg_color, abbreviation, icon = row
+                data.append({
+                    "id": cat_id,
+                    "properties": {
+                        "name": name,
+                        "hex_bg_color": hex_bg_color,
+                        "hex_fg_color": hex_fg_color,
+                        "abbreviation": abbreviation,
+                        "icon": icon
+                    }
+                })
 
-            except IndexError:
-                data.append({"category_id": id_, "error": "IndexError occurred."})
+        except IndexError:
+            data.append({"category_id": row, "error": "IndexError occurred."})
 
         return data
 
