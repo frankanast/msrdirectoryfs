@@ -113,6 +113,40 @@ def fetch_suppliers():
             connection.close()
 
 
+def fetch_categories():
+    try:
+        connection = psycopg2.connect(DATABASE_URL)
+        cursor = connection.cursor()
+
+    except (ConnectionError, psycopg2.Error, psycopg2.DatabaseError):
+        raise HTTPException(status_code=404, detail="No Database connection")
+
+    else:
+        cursor.execute("SELECT cat_id, name, hex_bg_color, hex_fg_color, abbreviation, icon FROM categories")
+        ids = cursor.fetchall()
+
+        data = []
+        for id_ in ids:
+            try:
+                data.append({
+                    "id": ids["cat_id"],
+                     "name": ids["name"],
+                     "backgroud_color": ids["hex_bg_color"],
+                     "text_color": ids["hex_fg_color"],
+                     "abbreviation": ids["abbreviation"],
+                     "icon": ids["icon"]
+                })
+
+            except IndexError:
+                data.append({"supplier_id": id_, "error": "IndexError occurred."})
+
+        return data
+
+    finally:
+        if connection:
+            connection.close()
+
+
 def get_grid_data():
     try:
         connection = psycopg2.connect(DATABASE_URL)
@@ -166,15 +200,23 @@ async def get_autocomplete_data():
     connection.close()
     return data
 
+
 @app.get("/grid_data")
 async def grid_data():
     data = get_grid_data()
     return data
 
+
 @app.get("/supplier/{supplier_id}")
 async def get_supplier_id(supplier_id: int):
     # Returns supplier info for the given id
     data = fetch_supplier(supplier_id)
+    return data
+
+
+@app.get("/categories/")
+def get_categories():
+    data = fetch_categories()
     return data
 
 
@@ -185,50 +227,6 @@ async def get_suppliers():
     return data
 
 
-@app.get("get_gmaps_url/{search_query}")
-async def get_gmaps_url(search_query):
-    base_url = "https://www.google.com/maps/search/?api=1&query="
-    encoded_query = '+'.join(search_query.split())  # Encode search query
-    return base_url + encoded_query
-
-
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
-
-
-def sftp_upload_file(file_path, filename):
-    transport = paramiko.Transport((SFTP_HOST, SFTP_PORT))
-    sftp = None
-    try:
-        transport.connect(username=SFTP_USERNAME, password=SFTP_PASSWORD)
-        sftp = paramiko.SFTPClient.from_transport(transport)
-
-        # Check if the file exists before upload
-        if not os.path.exists(file_path):
-            print(f"File does not exist: {file_path}")
-            return
-
-        sftp.put(file_path, f'www/profilepics/{filename}')
-    except Exception as e:
-        print(f"Failed to upload file due to: {e}. Filepath: {file_path}. Filename: {filename}.")
-
-    finally:
-        if sftp:
-            sftp.close()
-        transport.close()
-        if os.path.exists(file_path):
-            os.remove(file_path)  # Clean up the temp file after an upload attempt
-
-
-@app.post("/uploadpic/")
-async def create_upload_file(background_tasks: BackgroundTasks, file: UploadFile = File(...)):
-    temp_file = tempfile.NamedTemporaryFile(delete=False)
-    temp_file_path = temp_file.name
-    content = await file.read()
-    temp_file.write(content)
-    temp_file.close()
-
-    background_tasks.add_task(sftp_upload_file, temp_file_path, file.filename)
-
-    return {"filename": file.filename, "detail": "File upload initiated. The file will be uploaded in the background."}
