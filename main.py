@@ -129,7 +129,7 @@ def fetch_categories():
         for id_ in ids:
             try:
                 data.append({
-                    "id": ids["cat_id"],
+                    "id": id_,
                      "name": ids["name"],
                      "backgroud_color": ids["hex_bg_color"],
                      "text_color": ids["hex_fg_color"],
