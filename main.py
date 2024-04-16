@@ -128,17 +128,21 @@ def fetch_categories():
         data = []
         for id_ in ids:
             try:
-                data.append({
-                    "id": id_,
-                     "name": ids["name"],
-                     "backgroud_color": ids["hex_bg_color"],
-                     "text_color": ids["hex_fg_color"],
-                     "abbreviation": ids["abbreviation"],
-                     "icon": ids["icon"]
-                })
+                for row in ids:
+                    cat_id, name, hex_bg_color, hex_fg_color, abbreviation, icon = row
+                    data.append({
+                        "id": cat_id,
+                        "properties": {
+                            "name": name,
+                            "hex_bg_color": hex_bg_color,
+                            "hex_fg_color": hex_fg_color,
+                            "abbreviation": abbreviation,
+                            "icon": icon
+                        }
+                    })
 
             except IndexError:
-                data.append({"supplier_id": id_, "error": "IndexError occurred."})
+                data.append({"category_id": id_, "error": "IndexError occurred."})
 
         return data
 
