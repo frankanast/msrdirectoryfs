@@ -235,6 +235,7 @@ def get_categories():
 
 @app.post("/newcat/")
 def create_category(category: CategoryCreate):
+    print("Received: ", category)
     connection = psycopg2.connect(DATABASE_URL)
     cursor = connection.cursor()
 
