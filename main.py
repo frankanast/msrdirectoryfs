@@ -240,7 +240,10 @@ def create_category(category: CategoryCreate):
 
     try:
         cursor.execute(
-            "INSERT INTO categories (name, hex_bg_color, hex_fg_color, abbreviation, icon) VALUES (%s) RETURNING cat_id;",
+            """
+            INSERT INTO categories (name, hex_bg_color, hex_fg_color, abbreviation, icon) 
+            VALUES (%s, %s, %s, %s, %s) RETURNING cat_id;
+            """,
             (category.name, category.background_color, category.foreground_color, category.abbreviation, category.icon)
         )
         category_id = cursor.fetchone()[0]
