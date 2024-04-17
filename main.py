@@ -1,13 +1,15 @@
 from typing import Dict, Any
-from fastapi import FastAPI, HTTPException, File, UploadFile, BackgroundTasks
-from fastapi.responses import FileResponse
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import psycopg2
 import psycopg2.extras
 from pydantic import BaseModel
 import os
-import tempfile
-import paramiko
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 app = FastAPI()
 
