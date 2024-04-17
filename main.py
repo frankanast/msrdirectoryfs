@@ -4,6 +4,7 @@ from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 import psycopg2
 import psycopg2.extras
+from pydantic import BaseModel
 import os
 import tempfile
 import paramiko
@@ -24,6 +25,15 @@ SFTP_PORT = 22
 SFTP_USERNAME = os.getenv('SFTP_USERNAME')
 SFTP_PASSWORD = os.getenv('SFTP_PASSWORD')
 IMAGE_DIR = "www/profilepics"
+
+
+class CategoryCreate(BaseModel):
+    # ID is autoincremental, determined by the database automatically
+    name: str
+    abbreviation: str
+    background_color: str
+    foreground_color: str
+    icon: str
 
 
 def fetch_supplier(supplier_id: int) -> Dict[str, Any]:
@@ -221,6 +231,28 @@ async def get_supplier_id(supplier_id: int):
 def get_categories():
     data = fetch_categories()
     return data
+
+
+@app.post("/newcat/")
+def create_category(category: CategoryCreate):
+    connection = psycopg2.connect(DATABASE_URL)
+    cursor = connection.cursor()
+
+    try:
+        cursor.execute(
+            "INSERT INTO categories (name, hex_bg_color, hex_fg_color, abbreviation, icon) VALUES (%s) RETURNING cat_id;",
+            (category.name, category.background_color, category.foreground_color, category.abbreviation, category.icon)
+        )
+        category_id = cursor.fetchone()[0]
+
+        return {"id": category_id, "name": category.name}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+    finally:
+        cursor.close()
+        connection.close()
 
 
 @app.get("/suppliers")
