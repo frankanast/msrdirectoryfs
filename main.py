@@ -1,4 +1,4 @@
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import psycopg2
@@ -35,7 +35,7 @@ class CategoryCreate(BaseModel):
     abbreviation: str
     background_color: str
     foreground_color: str
-    icon: str
+    icon: Optional[str]
 
 
 def fetch_supplier(supplier_id: int) -> Dict[str, Any]:
