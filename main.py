@@ -1,4 +1,4 @@
-from typing import Dict, Any, Optional
+from typing import Dict, Any
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import psycopg2
@@ -35,7 +35,7 @@ class CategoryCreate(BaseModel):
     abbreviation: str
     background_color: str
     foreground_color: str
-    icon: Optional[str]
+    icon: str
 
 
 def fetch_supplier(supplier_id: int) -> Dict[str, Any]:
@@ -134,7 +134,11 @@ def fetch_categories():
         raise HTTPException(status_code=404, detail="No Database connection")
 
     else:
-        cursor.execute("SELECT cat_id, name, hex_bg_color, hex_fg_color, abbreviation, icon FROM categories")
+        cursor.execute("""
+        SELECT cat_id, name, hex_bg_color, hex_fg_color, abbreviation, icon 
+        FROM categories
+        ORDER BY name
+        """)
         ids = cursor.fetchall()
 
         data = []
@@ -237,7 +241,6 @@ def get_categories():
 
 @app.post("/newcat/")
 def create_category(category: CategoryCreate):
-    logger.info(f"Received category data: {category.json()}")
     connection = psycopg2.connect(DATABASE_URL)
     cursor = connection.cursor()
 
@@ -245,11 +248,13 @@ def create_category(category: CategoryCreate):
         cursor.execute(
             """
             INSERT INTO categories (name, hex_bg_color, hex_fg_color, abbreviation, icon) 
-            VALUES (%s, %s, %s, %s, %s) RETURNING cat_id;
+            VALUES (%s, %s, %s, %s, %s) 
+            RETURNING cat_id;
             """,
             (category.name, category.background_color, category.foreground_color, category.abbreviation, category.icon)
         )
         category_id = cursor.fetchone()[0]
+        connection.commit()
 
         return {"id": category_id, "name": category.name}
 
