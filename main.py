@@ -14,7 +14,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = FastAPI()
-AI_API_KEY = 'sk-proj-tqRonRlKgFSHF9xQuZO9T3BlbkFJuyaymopX3M5h53CnbT66'
+AI_API_KEY = os.getenv('AI_API_KEY')
 
 app.add_middleware(
     CORSMiddleware,
