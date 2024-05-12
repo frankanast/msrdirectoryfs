@@ -14,7 +14,6 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = FastAPI()
-AI_API_KEY = os.getenv('AI_API_KEY')
 
 app.add_middleware(
     CORSMiddleware,
@@ -30,6 +29,7 @@ SFTP_PORT = 22
 SFTP_USERNAME = os.getenv('SFTP_USERNAME')
 SFTP_PASSWORD = os.getenv('SFTP_PASSWORD')
 IMAGE_DIR = "www/profilepics"
+AI_API_KEY = os.getenv('AI_API_KEY')
 
 
 class CategoryCreate(BaseModel):
