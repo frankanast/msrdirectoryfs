@@ -286,11 +286,13 @@ async def categorize_place(types: str):
         """
 
     response = call_openai_api(prompt)
+
     if 'choices' in response and len(response['choices']) > 0:
         category = response['choices'][0]['text'].strip().upper()
         return {"category": category}
 
     else:
+        print(response)
         raise HTTPException(status_code=500, detail="Failed to get a valid response from the AI")
 
 
