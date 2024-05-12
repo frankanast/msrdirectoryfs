@@ -1,4 +1,4 @@
-from typing import Dict, Any, List
+from typing import Dict, Any
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import psycopg2
@@ -6,13 +6,15 @@ import psycopg2.extras
 from pydantic import BaseModel
 import os
 import logging
-import openai
+import http.client
+import json
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = FastAPI()
+AI_API_KEY = 'sk-proj-tqRonRlKgFSHF9xQuZO9T3BlbkFJuyaymopX3M5h53CnbT66'
 
 app.add_middleware(
     CORSMiddleware,
@@ -274,26 +276,40 @@ async def get_suppliers():
     return data
 
 
-@app.post("/guess-category")
-async def categorize_place(types: List[str]):
+@app.post("/guess-category/")
+async def categorize_place(types: list[str]):
     categories = str(get_categories)
     prompt = f"""
-    Given the keywords {types}, 
-    identify the best fitting category from this list: {categories}.
-    Please respond with only one category name."
-    """
+        Given the keywords {types}, 
+        identify the best fitting category from this list: {categories}.
+        Please respond with only one category name."
+        """
 
-    response = openai.Completion.create(
-      engine="davinci",
-      prompt=prompt,
-      max_tokens=50
-    )
+    response = call_openai_api(prompt)
+    if 'choices' in response and len(response['choices']) > 0:
+        category = response['choices'][0]['text'].strip().upper()
+        return {"category": category}
 
-    category_output = response.choices[0].text.strip()
-
-    return {"category": category_output}
+    else:
+        raise HTTPException(status_code=500, detail="Failed to get a valid response from the AI")
 
 
+def call_openai_api(prompt):
+    conn = http.client.HTTPSConnection("api.openai.com")
+    headers = {
+        'Content-Type': "application/json",
+        'Authorization': f"Bearer {AI_API_KEY}"
+    }
+    payload = json.dumps({
+        "model": "text-davinci-003",
+        "prompt": prompt,
+        "max_tokens": 50
+    })
+
+    conn.request("POST", "/v1/engines/davinci/completions", payload, headers)
+    res = conn.getresponse()
+    data = res.read()
+    return json.loads(data.decode("utf-8"))
 
 
 @app.get("/")
