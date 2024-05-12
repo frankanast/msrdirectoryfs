@@ -302,13 +302,14 @@ def call_openai_api(prompt):
         'Content-Type': "application/json",
         'Authorization': f"Bearer {AI_API_KEY}"
     }
+
     payload = json.dumps({
         "model": "text-davinci-003",
         "prompt": prompt,
         "max_tokens": 50
     })
 
-    conn.request("POST", "/v1/engines/davinci/completions", payload, headers)
+    conn.request("POST", "/v1/completions", payload, headers)
     res = conn.getresponse()
     data = res.read()
     return json.loads(data.decode("utf-8"))
