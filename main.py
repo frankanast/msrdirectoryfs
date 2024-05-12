@@ -277,10 +277,10 @@ async def get_suppliers():
 
 
 @app.post("/guess-category/")
-async def categorize_place(types: list[str]):
+async def categorize_place(types: str):
     categories = str(get_categories)
     prompt = f"""
-        Given the keywords {types}, 
+        Given the keywords: {types}, 
         identify the best fitting category from this list: {categories}.
         Please respond with only one category name."
         """
