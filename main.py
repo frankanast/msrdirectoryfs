@@ -1,4 +1,4 @@
-from typing import Dict, Any
+from typing import Dict, Any, List
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import psycopg2
@@ -6,6 +6,7 @@ import psycopg2.extras
 from pydantic import BaseModel
 import os
 import logging
+import openai
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -271,6 +272,28 @@ async def get_suppliers():
     # Returns all suppliers with complete details
     data = fetch_suppliers()
     return data
+
+
+@app.post("/guess-category")
+async def categorize_place(types: List[str]):
+    categories = str(get_categories)
+    prompt = f"""
+    Given the keywords {types}, 
+    identify the best fitting category from this list: {categories}.
+    Please respond with only one category name."
+    """
+
+    response = openai.Completion.create(
+      engine="davinci",
+      prompt=prompt,
+      max_tokens=50
+    )
+
+    category_output = response.choices[0].text.strip()
+
+    return {"category": category_output}
+
+
 
 
 @app.get("/")
