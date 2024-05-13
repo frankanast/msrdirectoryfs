@@ -128,7 +128,7 @@ def fetch_suppliers():
             connection.close()
 
 
-def fetch_categories():
+def fetch_categories(strategy: str = "complete"):
     try:
         connection = psycopg2.connect(DATABASE_URL)
         cursor = connection.cursor()
@@ -137,32 +137,53 @@ def fetch_categories():
         raise HTTPException(status_code=404, detail="No Database connection")
 
     else:
-        cursor.execute("""
-        SELECT cat_id, name, hex_bg_color, hex_fg_color, abbreviation, icon 
-        FROM categories
-        ORDER BY name
-        """)
-        ids = cursor.fetchall()
+        if strategy == "complete":
+            cursor.execute("""
+            SELECT cat_id, name, hex_bg_color, hex_fg_color, abbreviation, icon 
+            FROM categories
+            ORDER BY name
+            """)
 
-        data = []
-        try:
-            for row in ids:
-                cat_id, name, hex_bg_color, hex_fg_color, abbreviation, icon = row
-                data.append({
-                    "id": cat_id,
-                    "properties": {
-                        "name": name,
-                        "hex_bg_color": hex_bg_color,
-                        "hex_fg_color": hex_fg_color,
-                        "abbreviation": abbreviation,
-                        "icon": icon
-                    }
-                })
+            ids = cursor.fetchall()
 
-        except IndexError:
-            data.append({"category_id": row, "error": "IndexError occurred."})
+            data = []
+            try:
+                for row in ids:
+                    cat_id, name, hex_bg_color, hex_fg_color, abbreviation, icon = row
+                    data.append({
+                        "id": cat_id,
+                        "properties": {
+                            "name": name,
+                            "hex_bg_color": hex_bg_color,
+                            "hex_fg_color": hex_fg_color,
+                            "abbreviation": abbreviation,
+                            "icon": icon
+                        }
+                    })
 
-        return data
+            except IndexError:
+                data.append({"category_id": row, "error": "IndexError occurred."})
+
+            return data
+
+        else:
+            # ==> strategy == "names"
+            cursor.execute("""
+            SELECT name 
+            FROM categories
+            ORDER BY name
+            """)
+
+            names = cursor.fetchall()
+            data = ''
+
+            try:
+                data = ', '.join(name[0] for name in names)
+
+            except IndexError:
+                data += '?'
+
+            return data
 
     finally:
         if connection:
@@ -237,8 +258,8 @@ async def get_supplier_id(supplier_id: int):
 
 
 @app.get("/categories/")
-def get_categories():
-    data = fetch_categories()
+def get_categories(strategy: str = "complete"):
+    data = fetch_categories(strategy)
     return data
 
 
