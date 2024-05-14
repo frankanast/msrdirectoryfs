@@ -322,12 +322,10 @@ async def categorize_place(types: str):
     categories = str(get_categories(strategy="names"))
 
     prompt = f"""
-    Given the following list of KEYWORDS: {types}, and these CATEGORIES: {categories},
-    identify the single CATEGORY that best summarizes the KEYWORDS.
-    If you are unable to do so, respond "SENZA CATEGORIA".
+    Let KEYWORDS = [{types}] be a list of user-defined keywords, and CATEGORIES = [{categories}] a list of allowed choices;
+    identify the single item of CATEGORY that best summarizes all KEYWORDS.
     Respond with only the name of the chosen category, without any additional comments, explanations, or text.
-    Your response must match one of the items in the CATEGORIES list provided. 
-    The response will be used for automated input validation and must match the exact category name from the list provided.
+    The response will be used for automated input validation and must match one of the items in CATEGORIES.
     """
 
     response = call_openai_api(prompt)
