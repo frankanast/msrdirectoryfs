@@ -326,6 +326,7 @@ async def categorize_place(types: str):
     identify the single CATEGORY that best summarizes the KEYWORDS.
     If you are unable to do so, respond "SENZA CATEGORIA".
     Respond with only the name of the chosen category, without any additional comments, explanations, or text.
+    Your response must match one of the items in the CATEGORIES list provided. 
     The response will be used for automated input validation and must match the exact category name from the list provided.
     """
 
