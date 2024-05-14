@@ -319,14 +319,13 @@ async def get_suppliers():
 
 @app.post("/guess-category/")
 async def categorize_place(types: str):
-    categories = str(get_categories(strategy="names"))
+    categories = get_categories(strategy="names")
 
     prompt = f"""
-    Let KEYWORDS be a list of user-defined keywords: {types}. 
-    Let CATEGORIES be a list of allowed category tags: {categories}.
-    Identify the single item of CATEGORIES that best summarizes all KEYWORDS.
-    Respond with only the name of the chosen category, without any additional comments, explanations, or text.
-    The response will be used for automated input validation and must match one of the items in CATEGORIES.
+    Choose one unique word from the predefined list that best synthesizes the given list of keywords.
+    Predefined List: {str(categories)}
+    Given Keywords: {str(types)}
+    Output should consist only of the chosen word, nothing else (no additional comments, text, etc.).
     """
 
     response = call_openai_api(prompt)
