@@ -227,6 +227,26 @@ def get_grid_data():
         if connection:
             connection.close()
 
+
+def call_openai_api(prompt):
+    conn = http.client.HTTPSConnection("api.openai.com")
+    headers = {
+        'Content-Type': "application/json",
+        'Authorization': f"Bearer {AI_API_KEY}"
+    }
+
+    payload = json.dumps({
+        "model": "gpt-3.5-turbo-instruct",
+        "prompt": prompt,
+        "max_tokens": 50
+    })
+
+    conn.request("POST", "/v1/completions", payload, headers)
+    res = conn.getresponse()
+    data = res.read()
+    return json.loads(data.decode("utf-8"))
+
+
 @app.get("/autocomplete_data")
 async def get_autocomplete_data():
     connection = psycopg2.connect(DATABASE_URL)
@@ -301,10 +321,12 @@ async def get_suppliers():
 async def categorize_place(types: str):
     categories = str(get_categories(strategy="names"))
     prompt = f"""
-        Given the keywords: {types}, 
-        identify the best fitting category from this list: {categories}.
-        Please respond with only one category name."
-        """
+    Given the following list of KEYWORDS: {types}, and these CATEGORIES: {categories},
+    identify the single category that best summarizes the keywords.
+    Respond with only the name of the chosen category, without any additional comments, explanations, or text.
+    If you are unable to do so for any reason, respond "SENZA CATEGORIA".
+    The response will be used for automated input validation and must match the exact category name from the list provided.
+    """
 
     response = call_openai_api(prompt)
 
@@ -315,25 +337,6 @@ async def categorize_place(types: str):
     else:
         print(response)
         raise HTTPException(status_code=500, detail="Failed to get a valid response from the AI")
-
-
-def call_openai_api(prompt):
-    conn = http.client.HTTPSConnection("api.openai.com")
-    headers = {
-        'Content-Type': "application/json",
-        'Authorization': f"Bearer {AI_API_KEY}"
-    }
-
-    payload = json.dumps({
-        "model": "gpt-3.5-turbo-instruct",
-        "prompt": prompt,
-        "max_tokens": 50
-    })
-
-    conn.request("POST", "/v1/completions", payload, headers)
-    res = conn.getresponse()
-    data = res.read()
-    return json.loads(data.decode("utf-8"))
 
 
 @app.get("/")
