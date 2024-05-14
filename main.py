@@ -322,9 +322,9 @@ async def categorize_place(types: str):
     categories = str(get_categories(strategy="names"))
     prompt = f"""
     Given the following list of KEYWORDS: {types}, and these CATEGORIES: {categories},
-    identify the single category that best summarizes the keywords.
-    Respond with only the name of the chosen category, without any additional comments, explanations, or text.
+    identify the single CATEGORY that best summarizes the KEYWORDS.
     If you are unable to do so for any reason, respond "SENZA CATEGORIA".
+    Respond with only the name of the chosen category, without any additional comments, explanations, or text.
     The response will be used for automated input validation and must match the exact category name from the list provided.
     """
 
