@@ -322,8 +322,9 @@ async def categorize_place(types: str):
     categories = str(get_categories(strategy="names"))
 
     prompt = f"""
-    Let KEYWORDS = [{types}] be a list of user-defined keywords, and CATEGORIES = [{categories}] a list of allowed choices;
-    identify the single item of CATEGORY that best summarizes all KEYWORDS.
+    Let KEYWORDS be a list of user-defined keywords: {types}. 
+    Let CATEGORIES be a list of allowed category tags: {categories}.
+    Identify the single item of CATEGORIES that best summarizes all KEYWORDS.
     Respond with only the name of the chosen category, without any additional comments, explanations, or text.
     The response will be used for automated input validation and must match one of the items in CATEGORIES.
     """
